@@ -13,15 +13,15 @@ const authenticateUser = async (
     (req.cookies?.token as string) || req.headers?.authorization?.split(' ')[1];
 
   if (!token) {
-    return ApiError.unauthorized('User not authorized');
+    return next(ApiError.unauthorized('User not authorized'));
   }
   try {
     const decoded = verifyToken(token);
     const isUser = await User.findById(decoded._id);
     if (!isUser) {
-      return ApiError.badRequest('User not found');
+      return next(ApiError.badRequest('User not found'));
     }
-    req.user = isUser;
+    req.body.user = isUser;
     next();
   } catch (error) {
     if (error instanceof ApiError) {

@@ -5,6 +5,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import ApiError from './utils/ApiError';
 import authRouter from './routes/auth.router';
+import { NextFunction } from 'migrate';
 
 const port: number = process.env.PORT as unknown as number;
 
@@ -24,22 +25,25 @@ app.use(
 app.use(cookieParser());
 
 //routes
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!');
+app.get('/', (req, res) => {
+  res.send('Hellow world!');
 });
 app.use('/api/auth', authRouter);
 
 //error handler
-app.use((err: any, req: Request, res: Response, next: any) => {
-  if (err instanceof ApiError) {
-    return res.status(err.status).json({
-      messge: err.message,
+app.use(
+  (err: Error | ApiError, req: Request, res: Response, next: NextFunction) => {
+    if (err instanceof ApiError) {
+      return res.status(err.status).json({
+        messge: err.message,
+        data: err.data,
+      });
+    }
+    return res.status(500).json({
+      message: 'Internal server error occured',
     });
   }
-  return res.status(500).json({
-    message: 'Internal server error occured',
-  });
-});
+);
 
 //listening to server
 httpServer.listen(port, () => {
