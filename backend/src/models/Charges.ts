@@ -26,7 +26,6 @@ const chargesSchema: Schema<ICharges> = new Schema(
 );
 
 // Create the charges model
-const Charges =
-  mongoose.models.Charges || mongoose.model<ICharges>('Charges', chargesSchema);
+const Charges = mongoose.model<ICharges>('Charges', chargesSchema);
 
 export { Charges, ICharges };

@@ -1,5 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose';
-import { IUser } from './User';
+import mongoose, { Document, InferSchemaType, Schema } from 'mongoose';
 
 // Define driver status as an enum
 enum DriverStatus {
@@ -41,7 +40,8 @@ const driverSchema: Schema<IDriver> = new Schema(
 );
 
 // Create the driver model
-const Driver =
-  mongoose.models.Driver || mongoose.model<IDriver>('Driver', driverSchema);
+const Driver = mongoose.model<IDriver>('Driver', driverSchema);
+// const Driver =
+//   mongoose.models.Driver || mongoose.model<IDriver>('Driver', driverSchema);
 
-export { Driver, IDriver, DriverStatus };
+export { DriverStatus, Driver };

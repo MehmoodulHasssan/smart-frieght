@@ -52,7 +52,6 @@ const invoiceSchema: Schema<IInvoice> = new Schema(
 );
 
 // Create the invoice model
-const Invoice =
-  mongoose.models.Invoice || mongoose.model<IInvoice>('Invoice', invoiceSchema);
+const Invoice = mongoose.model<IInvoice>('Invoice', invoiceSchema);
 
 export { Invoice, IInvoice, PaymentType, PaymentStatus };

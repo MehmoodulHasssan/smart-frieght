@@ -50,7 +50,6 @@ const vehicleSchema: Schema<IVehicle> = new Schema(
 );
 
 // Create the vehicle model
-const Vehicle =
-  mongoose.models.Vehicle || mongoose.model<IVehicle>('Vehicle', vehicleSchema);
+const Vehicle = mongoose.model<IVehicle>('Vehicle', vehicleSchema);
 
 export { Vehicle, IVehicle, VehicleStatus };

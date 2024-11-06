@@ -1,14 +1,31 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import {
   loginController,
-  signupController,
+  driverRegisterController,
   logoutController,
+  consignorRegisterController,
 } from '../controllers/auth.controllers';
+import {
+  consignorRegisterValidation,
+  driverRegisterValidation,
+  loginValidation,
+} from '../utils/validations';
+import { authenticateUser } from '../middlewares/authenticate.user';
+const authRouter = express.Router();
 
-const router = express.Router();
+authRouter.post('/login', loginValidation, loginController);
 
-router.post('/login', loginController);
+authRouter.post(
+  '/register/consignor',
+  consignorRegisterValidation,
+  consignorRegisterController
+);
+authRouter.post(
+  '/register/driver',
+  driverRegisterValidation,
+  driverRegisterController
+);
 
-router.post('/register', signupController);
+authRouter.post('/logout', authenticateUser, logoutController);
 
-router.post('/logout', logoutController);
+export default authRouter;

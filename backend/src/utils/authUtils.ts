@@ -1,18 +1,16 @@
 import jwt from 'jsonwebtoken';
 import bcryptjs from 'bcryptjs';
 import dotenv from 'dotenv';
+import ApiError from './ApiError';
+import { Types } from 'mongoose';
 dotenv.config();
 
 // Token generation
-const generateToken = (user: any) => {
+const generateToken = (userId: Types.ObjectId) => {
   // Create a JWT token with user information
-  const token = jwt.sign(
-    { userId: user._id },
-    process.env.TOKEN_KEY as string,
-    {
-      expiresIn: '1h',
-    }
-  );
+  const token = jwt.sign(userId, process.env.TOKEN_KEY as string, {
+    expiresIn: process.env.ACCESS_TOKEN_EXPIRY as string,
+  });
   return token;
 };
 
@@ -20,9 +18,10 @@ const generateToken = (user: any) => {
 const verifyToken = (token: string) => {
   try {
     const decoded = jwt.verify(token, process.env.TOKEN_KEY as string);
-    return decoded;
+    return decoded as { _id: string };
   } catch (error) {
-    throw error;
+    console.log(error);
+    throw ApiError.unauthorized('Invalid access token');
   }
 };
 

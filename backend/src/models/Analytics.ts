@@ -44,8 +44,6 @@ const analyticsSchema: Schema<IAnalytics> = new Schema(
 );
 
 // Create the analytics model
-const Analytics =
-  mongoose.models.Analytics ||
-  mongoose.model<IAnalytics>('Analytics', analyticsSchema);
+const Analytics = mongoose.model<IAnalytics>('Analytics', analyticsSchema);
 
 export { Analytics, IAnalytics };

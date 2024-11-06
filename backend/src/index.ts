@@ -4,6 +4,7 @@ import { connectDb } from './configureDb';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import ApiError from './utils/ApiError';
+import authRouter from './routes/auth.router';
 
 const port: number = process.env.PORT as unknown as number;
 
@@ -26,7 +27,7 @@ app.use(cookieParser());
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
 });
-app.use('/api/auth');
+app.use('/api/auth', authRouter);
 
 //error handler
 app.use((err: any, req: Request, res: Response, next: any) => {

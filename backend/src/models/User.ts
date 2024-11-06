@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, InferSchemaType, Schema } from 'mongoose';
 import { hashPassword } from '../utils/authUtils';
 
 // Define user roles as an enum
@@ -55,7 +55,6 @@ const userSchema: Schema<IUser> = new Schema(
 );
 
 // Create the user model
-const User = mongoose.models.User || mongoose.model<IUser>('User', userSchema);
 
 // create a pre function to hash the password before saving it to the database
 userSchema.pre('save', function (next) {
@@ -74,4 +73,6 @@ userSchema.pre('save', function (next) {
     });
 });
 
-export { User, IUser, UserRole };
+const User = mongoose.model<IUser>('User', userSchema);
+export { UserRole, User, IUser };
+// export { User, IUser, UserRole };

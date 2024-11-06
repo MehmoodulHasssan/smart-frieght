@@ -8,29 +8,31 @@ enum HttpStatusCodes {
 
 class ApiError extends Error {
   status: number;
-  constructor(status: number, message: string) {
+  data?: any;
+  constructor(status: number, message: string, data: any) {
     super(message);
     this.status = status;
     this.message = message;
+    this.data = data;
     this.name = this.constructor.name;
   }
 
   //following all are static methods that return new instances of ApiError
   //so there is no need to create new instances in the controllers i.e., new ApiError(..) format
-  static badRequest(message: string) {
-    return new ApiError(HttpStatusCodes.BAD_REQUEST, message);
+  static badRequest(message: string, data?: any) {
+    return new ApiError(HttpStatusCodes.BAD_REQUEST, message, data);
   }
 
-  static internal(message: string) {
-    return new ApiError(HttpStatusCodes.INTERNAL_SERVER_ERROR, message);
+  static internal(message: string, data?: any) {
+    return new ApiError(HttpStatusCodes.INTERNAL_SERVER_ERROR, message, data);
   }
 
-  static unauthorized(message: string) {
-    return new ApiError(HttpStatusCodes.UNAUTHORIZED, message);
+  static unauthorized(message: string, data?: any) {
+    return new ApiError(HttpStatusCodes.UNAUTHORIZED, message, data);
   }
 
-  static forbidden(message: string) {
-    return new ApiError(HttpStatusCodes.FORBIDDEN, message);
+  static forbidden(message: string, data?: any) {
+    return new ApiError(HttpStatusCodes.FORBIDDEN, message, data);
   }
 }
 
