@@ -34,7 +34,7 @@ const loginController = async (
       secure: true,
       sameSite: 'lax',
     });
-    return new ApiResponse(200, user, 'User logged in successfully');
+    return new ApiResponse(200, user, 'User logged in successfully').send(res);
   } catch (error) {
     console.log(error);
     if (error instanceof ApiError) {
@@ -58,6 +58,10 @@ const consignorRegisterController = async (
     }
     const { full_name, email, phone_number, password } = req.body;
 
+    const user = await User.findOne({ email });
+    if (user) {
+      return next(ApiError.badRequest('This email is already registerd'));
+    }
     const consignor = await User.create({
       full_name,
       email,
@@ -66,7 +70,20 @@ const consignorRegisterController = async (
       role: UserRole.CONSIGNOR,
     });
 
-    return new ApiResponse(200, consignor, 'User created successfully');
+    if (!consignor) {
+      return next(ApiError.internal('Failed to create user.Please try again'));
+    }
+    const userResponse = {
+      id: consignor._id,
+      full_name: consignor.full_name,
+      email: consignor.email,
+      phone_number: consignor.phone_number,
+      role: consignor.role,
+    };
+
+    return new ApiResponse(200, userResponse, 'User created successfully').send(
+      res
+    );
   } catch (error) {
     if (error instanceof ApiError) {
       return next(error);
@@ -88,6 +105,11 @@ const driverRegisterController = async (
       );
     }
     const { full_name, email, phone_number, password, licence_no } = req.body;
+    // console.log(req.body);
+    const isUser = await User.findOne({ email });
+    if (isUser) {
+      return next(ApiError.badRequest('This email is already registerd'));
+    }
     const newUser = await User.create({
       full_name,
       email,
@@ -96,18 +118,38 @@ const driverRegisterController = async (
       role: UserRole.DRIVER,
     });
 
+    if (!newUser) {
+      return next(ApiError.internal('Failed to create user.Please try again'));
+    }
+
     const newDriver = await Driver.create({
       licence_no,
       user_id: newUser._id,
       status: DriverStatus.UNAVAILABLE,
     });
 
+    if (!newDriver) {
+      await User.findByIdAndDelete(newUser._id);
+      return next(
+        ApiError.internal('Failed to create driver.Please try again')
+      );
+    }
+    const driverResponse = {
+      id: newUser._id,
+      full_name: newUser.full_name,
+      email: newUser.email,
+      phone_number: newUser.phone_number,
+      licence_no: newDriver.licence_no,
+      role: newUser.role,
+    };
+
     return new ApiResponse(
       201,
-      { ...newDriver, ...newUser },
+      driverResponse,
       'Driver created successfully'
-    );
+    ).send(res);
   } catch (error) {
+    console.log(error);
     if (error instanceof ApiError) {
       return next(error);
     }
@@ -122,7 +164,7 @@ const logoutController = async (
 ) => {
   try {
     res.clearCookie('token');
-    return new ApiResponse(200, null, 'User logged out successfully');
+    return new ApiResponse(200, null, 'User logged out successfully').send(res);
   } catch (error) {
     return next(error);
   }

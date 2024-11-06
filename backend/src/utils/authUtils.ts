@@ -8,9 +8,13 @@ dotenv.config();
 // Token generation
 const generateToken = (userId: Types.ObjectId) => {
   // Create a JWT token with user information
-  const token = jwt.sign(userId, process.env.TOKEN_KEY as string, {
-    expiresIn: process.env.ACCESS_TOKEN_EXPIRY as string,
-  });
+  const token = jwt.sign(
+    { _id: userId },
+    process.env.ACCESS_TOKEN_SECRET as string,
+    {
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRY as string,
+    }
+  );
   return token;
 };
 

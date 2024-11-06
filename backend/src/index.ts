@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import ApiError from './utils/ApiError';
 import authRouter from './routes/auth.router';
 import { NextFunction } from 'migrate';
+import { error } from 'console';
 
 const port: number = process.env.PORT as unknown as number;
 
@@ -33,6 +34,7 @@ app.use('/api/auth', authRouter);
 //error handler
 app.use(
   (err: Error | ApiError, req: Request, res: Response, next: NextFunction) => {
+    // console.log(err);
     if (err instanceof ApiError) {
       return res.status(err.status).json({
         messge: err.message,
