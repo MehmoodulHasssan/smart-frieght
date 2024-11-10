@@ -1,3 +1,4 @@
+'use client';
 import {
   createContext,
   useContext,
@@ -20,8 +21,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // Retrieve the preferred theme from the system
-    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
-      .matches
+    const systemTheme = window.matchMedia('(prefers-color-scheme:dark)').matches
       ? 'dark'
       : 'light';
     const storedTheme = localStorage.getItem('theme') as Theme | null;

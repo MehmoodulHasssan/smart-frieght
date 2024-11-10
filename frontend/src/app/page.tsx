@@ -1,7 +1,14 @@
+import Header from '@/components/Header';
+import { useTheme } from '@/context/themeContext';
 import React from 'react';
 
 const page = () => {
-  return <div>page</div>;
+  return (
+    <>
+      <Header />
+      <div>Hi bro</div>
+    </>
+  );
 };
 
 export default page;

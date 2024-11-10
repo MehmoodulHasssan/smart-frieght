@@ -15,7 +15,64 @@
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  /* color: var(--foreground);
+  background: var(--background); */
+  font-family: 'Geist-Regular', sans-serif;
+  /* font-family: Arial, Helvetica, sans-serif; */
+}
+
+/* Geist Black */
+@font-face {
+  font-family: 'Geist-Black';
+  src: url('/fonts/Geist-Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* Geist Bold */
+@font-face {
+  font-family: 'Geist-Bold';
+  src: url('/fonts/Geist-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Geist Medium */
+@font-face {
+  font-family: 'Geist-Medium';
+  src: url('/fonts/Geist-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* Geist SemiBold */
+@font-face {
+  font-family: 'Geist-SemiBold';
+  src: url('/fonts/Geist-SemiBold.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* Geist Regular */
+@font-face {
+  font-family: 'Geist-Regular';
+  src: url('/fonts/Geist-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Geist Light */
+@font-face {
+  font-family: 'Geist-Light';
+  src: url('/fonts/Geist-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* Geist Thin */
+@font-face {
+  font-family: 'Geist-Thin';
+  src: url('/fonts/Geist-Thin.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
 }
