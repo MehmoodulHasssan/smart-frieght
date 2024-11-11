@@ -1,4 +1,5 @@
 import Header from '@/components/Header';
+import Hero from '@/components/Hero';
 import { useTheme } from '@/context/themeContext';
 import React from 'react';
 
@@ -6,7 +7,7 @@ const page = () => {
   return (
     <>
       <Header />
-      <div>Hi bro</div>
+      <Hero />
     </>
   );
 };

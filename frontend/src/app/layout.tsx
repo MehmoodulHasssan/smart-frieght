@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="hide-scrollbar">
       <body className={`antialiased`}>
         <ThemeProvider>
           <ThemedWrapper>{children}</ThemedWrapper>
