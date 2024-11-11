@@ -3,23 +3,49 @@ import { useTheme } from '@/context/themeContext';
 import Image from 'next/image';
 import React from 'react';
 import GradientButton from './GradientButton';
-import Link from 'next/link';
 import ThemeToggleBtn from './ThemeToggleBtn';
 import NavLink from './NavLink';
 import { useRouter } from 'next/navigation';
 import HamBurger from '@/components/HamBurger';
+import { useAuthContext } from '@/context/authContext';
+import { logoutUser } from '@/utils/mutations/authMutations';
+import { useMutation } from '@tanstack/react-query';
+import { useToast } from '@/hooks/use-toast';
 // import logo from '/vercel.svg';
 
 const Header = () => {
   const { theme } = useTheme();
+  const { toast } = useToast();
+  const { currentUser, setCurrentUser } = useAuthContext();
+  const { mutate, isPending } = useMutation({
+    mutationKey: ['logoutUser'],
+    mutationFn: logoutUser,
+    onSuccess: () => {
+      setCurrentUser(null);
+      toast({
+        title: 'Success',
+        description: 'Logged out successfully',
+      });
+      router.push('/auth/login');
+    },
+    onError: (error) => {
+      console.log(error);
+      toast({
+        title: 'Error',
+        description: 'Something went wrong',
+      });
+    },
+  });
   const router = useRouter();
 
-  // const scrollToSection = (sectionId: string) => {
-  //   const element = document.getElementById(sectionId);
-  //   if (element) {
-  //     element.scrollIntoView({ behavior: 'smooth' });
-  //   }
-  // }
+  const handleClick = () => {
+    if (currentUser) {
+      mutate();
+    } else {
+      router.push('/auth/login');
+    }
+  };
+
   return (
     <nav className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-md">
       {/* Left side: Logo and title */}
@@ -53,8 +79,8 @@ const Header = () => {
         {/* Dark mode toggle */}
         <ThemeToggleBtn />
         <GradientButton
-          title="Log In"
-          onClick={() => router.push('/auth/login')}
+          title={currentUser ? 'Log Out' : 'Log In'}
+          onClick={handleClick}
         />
         <HamBurger />
         {/* Login button */}

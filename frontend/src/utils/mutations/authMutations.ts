@@ -25,7 +25,11 @@ const registerConsignor = async (data: {
 };
 
 export const verifyUser = async (): Promise<IUserResponse> => {
-  return await apiCall(API_ROUTES.AUTH.VERIFY, 'POST', null);
+  return await apiCall(API_ROUTES.AUTH.VERIFY, 'POST', undefined);
+};
+
+export const logoutUser = async () => {
+  return await apiCall(API_ROUTES.AUTH.LOGOUT, 'POST', undefined);
 };
 
 export { loginUser, registerConsignor, registerDriver };

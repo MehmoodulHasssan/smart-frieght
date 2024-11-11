@@ -39,8 +39,9 @@ const loginController = async (
     res.cookie('token', token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'lax',
+      sameSite: 'none',
     });
+
     return new ApiResponse(
       200,
       userResponse,

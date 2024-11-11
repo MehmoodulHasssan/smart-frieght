@@ -20,6 +20,10 @@ const DriverRegister = () => {
     mutationFn: registerDriver,
     onSuccess: (data) => {
       console.log(data);
+      toast({
+        title: 'Success',
+        description: data.message,
+      });
       router.push('/auth/login');
     },
     onError: (error: ApiError) => {

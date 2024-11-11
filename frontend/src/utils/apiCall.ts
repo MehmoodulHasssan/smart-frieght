@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-axios.create({ withCredentials: true });
+axios.defaults.withCredentials = true;
 
 export interface ApiResponse {
   status: 'success' | 'error';

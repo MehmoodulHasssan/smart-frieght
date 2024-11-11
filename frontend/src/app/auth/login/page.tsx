@@ -28,6 +28,10 @@ const Page = () => {
     onSuccess: (data) => {
       console.log(data);
       setCurrentUser(data.data);
+      toast({
+        title: 'Success',
+        description: data.message,
+      });
       router.push('/');
     },
     onError: (error: ApiError) => {
@@ -55,7 +59,8 @@ const Page = () => {
   return (
     <>
       <Header />
-      <div className="flex justify-center items-center min-h-[30rem]">
+      <div className="flex flex-col justify-center space-y-4 items-center mt-12">
+        <h1 className="text-2xl font-geist-bold text-center">User Login</h1>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}

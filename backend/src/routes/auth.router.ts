@@ -27,7 +27,7 @@ authRouter.post(
   driverRegisterController
 );
 
-authRouter.get('/verify', authenticateUser, verifyUserController);
+authRouter.post('/verify', authenticateUser, verifyUserController);
 
 authRouter.post('/logout', authenticateUser, logoutController);
 
