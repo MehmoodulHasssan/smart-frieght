@@ -5,4 +5,17 @@ const loginSchema = z.object({
   password: z.string().min(8),
 });
 
-export { loginSchema };
+const consignorRegisterSchema = z.object({
+  full_name: z.string(),
+  email: z.string().email(),
+  phone_number: z.string(),
+  password: z.string().min(8),
+});
+const driverRegisterSchema = z.object({
+  full_name: z.string(),
+  email: z.string().email(),
+  licence_no: z.string(),
+  phone_number: z.string(),
+  password: z.string().min(8),
+});
+export { loginSchema, consignorRegisterSchema, driverRegisterSchema };

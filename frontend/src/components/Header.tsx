@@ -2,12 +2,12 @@
 import { useTheme } from '@/context/themeContext';
 import Image from 'next/image';
 import React from 'react';
-import { LuMoon, LuSun } from 'react-icons/lu';
 import GradientButton from './GradientButton';
 import Link from 'next/link';
 import ThemeToggleBtn from './ThemeToggleBtn';
 import NavLink from './NavLink';
 import { useRouter } from 'next/navigation';
+import HamBurger from '@/components/HamBurger';
 // import logo from '/vercel.svg';
 
 const Header = () => {
@@ -39,7 +39,7 @@ const Header = () => {
 
       {/* Middle: Navigation options */}
       <div
-        className={`hidden md:flex space-x-6 ${
+        className={`hidden lg:flex space-x-6 ${
           theme == 'dark' ? 'text-white' : 'text-black'
         }`}
       >
@@ -49,14 +49,14 @@ const Header = () => {
       </div>
 
       {/* Right side: Dark mode toggle and Login button */}
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-2 lg:space-x-4">
         {/* Dark mode toggle */}
         <ThemeToggleBtn />
         <GradientButton
           title="Log In"
           onClick={() => router.push('/auth/login')}
         />
-
+        <HamBurger />
         {/* Login button */}
       </div>
     </nav>

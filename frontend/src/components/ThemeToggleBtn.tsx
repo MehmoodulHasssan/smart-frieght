@@ -8,7 +8,9 @@ const ThemeToggleBtn = () => {
     <button
       onClick={() => toggleTheme()}
       className={`w-10 aspect-square flex items-center justify-center p-1 rounded-lg ${
-        theme === 'light' ? ' hover:bg-gray-300' : ' hover:bg-gray-700'
+        theme === 'light'
+          ? ' hover:bg-gray-300 active:bg-gray-300'
+          : ' hover:bg-gray-700 active:bg-gray-700'
       }`}
       aria-label="Toggle dark mode"
     >

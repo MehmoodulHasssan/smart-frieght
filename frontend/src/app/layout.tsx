@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/context/themeContext';
 import ThemedWrapper from '@/components/ThemedWrapper';
+import ContextWrapper from '@/components/ContextWrapper';
 
 // const geistSans = localFont({
 //   src: './fonts/GeistVF.woff',
@@ -27,9 +28,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="hide-scrollbar">
       <body className={`antialiased`}>
-        <ThemeProvider>
+        <ContextWrapper>
           <ThemedWrapper>{children}</ThemedWrapper>
-        </ThemeProvider>
+        </ContextWrapper>
       </body>
     </html>
   );

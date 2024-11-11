@@ -1,6 +1,7 @@
 'use client';
 import { useTheme } from '@/context/themeContext';
 import React from 'react';
+import { Toaster } from '@/components/ui/toaster';
 
 const ThemedWrapper = ({ children }: { children: React.ReactNode }) => {
   const { theme } = useTheme();
@@ -11,6 +12,7 @@ const ThemedWrapper = ({ children }: { children: React.ReactNode }) => {
       }`}
     >
       {children}
+      <Toaster />
     </div>
   );
 };

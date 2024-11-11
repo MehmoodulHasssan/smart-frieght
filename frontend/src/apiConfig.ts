@@ -6,6 +6,7 @@ const API_ROUTES = {
     REGISTER_CONSIGNOR: API_DOMAIN + '/auth/register/consignor',
     REGISTER_DRIVER: API_DOMAIN + '/auth/register/driver',
     LOGOUT: API_DOMAIN + '/auth/logout',
+    VERIFY: API_DOMAIN + '/auth/verify',
   },
   DRIVER: {
     UPDATE_STATUS: API_DOMAIN + '/driver/update-status',

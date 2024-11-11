@@ -21,7 +21,10 @@ const generateToken = (userId: Types.ObjectId) => {
 // Token verification
 const verifyToken = (token: string) => {
   try {
-    const decoded = jwt.verify(token, process.env.TOKEN_KEY as string);
+    const decoded = jwt.verify(
+      token,
+      process.env.ACCESS_TOKEN_SECRET as string
+    );
     return decoded as { _id: string };
   } catch (error) {
     console.log(error);

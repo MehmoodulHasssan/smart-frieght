@@ -1,73 +1,84 @@
-'use client';
-import Header from '@/components/Header';
 import React from 'react';
-import { Form } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
+import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { loginSchema } from '@/utils/validationSchemas';
+import { driverRegisterSchema } from '@/utils/validationSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import CustomFormField from '@/components/CustomFormField';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
-import { loginUser } from '@/utils/mutations/authMutations';
-import { useAuthContext } from '@/context/authContext';
 import { useToast } from '@/hooks/use-toast';
-import { title } from 'process';
 import { ApiError } from '@/utils/apiCall';
+import { registerDriver } from '@/utils/mutations/authMutations';
 
-// Infer form data type from Zod schema
-
-const Page = () => {
-  const { setCurrentUser } = useAuthContext();
-  const { toast } = useToast();
+const DriverRegister = () => {
   const router = useRouter();
+  const { toast } = useToast();
   const { mutate, isPending } = useMutation({
     mutationKey: ['login'],
-    mutationFn: loginUser,
+    mutationFn: registerDriver,
     onSuccess: (data) => {
       console.log(data);
-      setCurrentUser(data.data);
-      router.push('/');
+      router.push('/auth/login');
     },
     onError: (error: ApiError) => {
       toast({
         title: 'Error',
         description: error.message,
       });
-      setCurrentUser(null);
     },
   });
-  const form = useForm<z.infer<typeof loginSchema>>({
+  const form = useForm<z.infer<typeof driverRegisterSchema>>({
     mode: 'onChange',
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(driverRegisterSchema),
     defaultValues: {
+      full_name: '',
+      phone_number: '',
+      licence_no: '',
       email: '',
       password: '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof loginSchema>) {
+  function onSubmit(values: z.infer<typeof driverRegisterSchema>) {
     console.log(values);
     mutate(values);
   }
 
   return (
     <>
-      <Header />
       <div className="flex justify-center items-center min-h-[30rem]">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="w-11/12 md:w-7/12 lg:w-3/12 h-full justify-center flex flex-col space-y-8"
+            className="w-full h-full justify-center flex flex-col px-1 space-y-8"
           >
+            <CustomFormField
+              control={form.control}
+              name="full_name"
+              label="Full Name"
+              placeholder="Enter your full name"
+            />
+            <CustomFormField
+              control={form.control}
+              name="phone_number"
+              label="Phone Number"
+              placeholder="Enter your phone number"
+            />
             <CustomFormField
               control={form.control}
               name="email"
               label="Email"
               placeholder="Enter your email"
             />
-
+            <CustomFormField
+              control={form.control}
+              name="licence_no"
+              label="Licence Number"
+              placeholder="Enter your licence number"
+              type="number"
+            />
             <CustomFormField
               control={form.control}
               name="password"
@@ -77,14 +88,14 @@ const Page = () => {
             <div className="flex space-x-2 text-sm">
               <p>Don&apos;t have an account? </p>
               <button
-                onClick={() => router.push('/auth/register')}
+                onClick={() => router.push('/auth/signup')}
                 className="hover:opacity-75"
               >
-                Register
+                Login
               </button>
             </div>
             <Button disabled={isPending} className="max-w-fit" type="submit">
-              {isPending ? 'Logging in...' : 'Login'}
+              {isPending ? 'Registering...' : 'Register'}
             </Button>
           </form>
         </Form>
@@ -93,4 +104,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default DriverRegister;

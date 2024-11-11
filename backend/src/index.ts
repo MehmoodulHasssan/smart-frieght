@@ -23,6 +23,7 @@ app.use(
     methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
   })
 );
+
 app.use(cookieParser());
 
 //routes
@@ -37,7 +38,7 @@ app.use(
     // console.log(err);
     if (err instanceof ApiError) {
       return res.status(err.status).json({
-        messge: err.message,
+        message: err.message,
         data: err.data,
       });
     }

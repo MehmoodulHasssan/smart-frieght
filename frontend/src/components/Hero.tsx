@@ -12,9 +12,9 @@ const Hero = () => {
       : 'from-purple-500 via-violet-500 to-pink-500'; // Light mode gradient
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[90vh] md:text-4xl lg:text-7xl font-bold text-center font-sans tracking-tight">
+    <div className="flex flex-col items-center justify-center h-[80vh] text-2xl md:text-4xl lg:text-7xl font-bold text-center font-sans tracking-tight">
       <h2
-        className={`text-2xl relative z-20 md:text-4xl lg:text-7xl font-bold text-center font-sans tracking-tight ${textColor}`}
+        className={`relative z-20 font-bold text-center font-sans tracking-tight ${textColor}`}
       >
         Optimize Every Load {/* <h2> */}
       </h2>

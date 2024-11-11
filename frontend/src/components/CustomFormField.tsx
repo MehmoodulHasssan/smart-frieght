@@ -16,6 +16,7 @@ interface GenericFormFieldProps<T extends FieldValues> {
   name: Path<T>;
   label: string;
   placeholder?: string;
+  type?: React.HTMLInputTypeAttribute | undefined;
 }
 
 const CustomFormField = <T extends FieldValues>(
@@ -29,7 +30,11 @@ const CustomFormField = <T extends FieldValues>(
         <FormItem className="w-full">
           <FormLabel>{props.label}</FormLabel>
           <FormControl>
-            <Input placeholder={props.placeholder} {...field} />
+            <Input
+              placeholder={props.placeholder}
+              type={props.type || 'text'}
+              {...field}
+            />
           </FormControl>
           {/* <FormDescription>
                 This is your public display name.

@@ -29,12 +29,23 @@ const loginController = async (
       return next(ApiError.badRequest('Your password is not correct'));
     }
     const token = generateToken(user._id as Types.ObjectId);
+    const userResponse = {
+      _id: user._id,
+      email: user.email,
+      role: user.role,
+      full_name: user.full_name,
+      phone_number: user.phone_number,
+    };
     res.cookie('token', token, {
       httpOnly: true,
       secure: true,
       sameSite: 'lax',
     });
-    return new ApiResponse(200, user, 'User logged in successfully').send(res);
+    return new ApiResponse(
+      200,
+      userResponse,
+      'User logged in successfully'
+    ).send(res);
   } catch (error) {
     console.log(error);
     if (error instanceof ApiError) {
@@ -170,9 +181,37 @@ const logoutController = async (
   }
 };
 
+const verifyUserController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = req.body._user;
+    if (!user) {
+      return next(ApiError.badRequest('User not found'));
+    }
+    const userResponse = {
+      _id: user._id,
+      email: user.email,
+      role: user.role,
+      full_name: user.full_name,
+      phone_number: user.phone_number,
+    };
+    return new ApiResponse(
+      200,
+      userResponse,
+      'User verified successfully'
+    ).send(res);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export {
   loginController,
   consignorRegisterController,
   driverRegisterController,
   logoutController,
+  verifyUserController,
 };

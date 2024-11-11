@@ -21,7 +21,7 @@ const authenticateUser = async (
     if (!isUser) {
       return next(ApiError.badRequest('User not found'));
     }
-    req.body.user = isUser;
+    req.body._user = isUser;
     next();
   } catch (error) {
     if (error instanceof ApiError) {

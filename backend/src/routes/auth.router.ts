@@ -4,6 +4,7 @@ import {
   driverRegisterController,
   logoutController,
   consignorRegisterController,
+  verifyUserController,
 } from '../controllers/auth.controllers';
 import {
   consignorRegisterValidation,
@@ -25,6 +26,8 @@ authRouter.post(
   driverRegisterValidation,
   driverRegisterController
 );
+
+authRouter.get('/verify', authenticateUser, verifyUserController);
 
 authRouter.post('/logout', authenticateUser, logoutController);
 
