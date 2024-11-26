@@ -21,6 +21,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // Retrieve the preferred theme from the system
+    if (typeof window === 'undefined') return;
     const systemTheme = window.matchMedia('(prefers-color-scheme:dark)').matches
       ? 'dark'
       : 'light';

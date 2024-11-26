@@ -3,6 +3,7 @@ import { ThemeProvider } from '@/context/themeContext';
 import React from 'react';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { AuthContextProvider } from '@/context/authContext';
+// import { MapProvider } from '@/context/mapContext';
 
 const ContextWrapper = ({ children }: { children: React.ReactNode }) => {
   const client = new QueryClient();

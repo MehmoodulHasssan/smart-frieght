@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const loginSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
 });
 
 const consignorRegisterSchema = z.object({
@@ -18,4 +18,18 @@ const driverRegisterSchema = z.object({
   phone_number: z.string(),
   password: z.string().min(8),
 });
-export { loginSchema, consignorRegisterSchema, driverRegisterSchema };
+
+const createOrderSchema = z.object({
+  pickup_location: z.string(),
+  dropoff_location: z.string(),
+  weight_kg: z.number(),
+  vehicle_type: z.string(),
+  city: z.string(),
+});
+
+export {
+  loginSchema,
+  consignorRegisterSchema,
+  driverRegisterSchema,
+  createOrderSchema,
+};

@@ -11,6 +11,7 @@ import { useAuthContext } from '@/context/authContext';
 import { logoutUser } from '@/utils/mutations/authMutations';
 import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
+import { navData } from '@/utils/data';
 // import logo from '/vercel.svg';
 
 const Header = () => {
@@ -69,8 +70,12 @@ const Header = () => {
           theme == 'dark' ? 'text-white' : 'text-black'
         }`}
       >
-        {['Home', 'About', 'Services', 'Contact'].map((link, index) => (
-          <NavLink key={index} link={link} />
+        {navData.map((navItem) => (
+          <NavLink
+            key={navItem.title}
+            title={navItem.title}
+            href={navItem.href}
+          />
         ))}
       </div>
 

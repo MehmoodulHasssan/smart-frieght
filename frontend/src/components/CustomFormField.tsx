@@ -26,22 +26,25 @@ const CustomFormField = <T extends FieldValues>(
     <FormField
       control={props.control}
       name={props.name}
-      render={({ field }) => (
-        <FormItem className="w-full">
-          <FormLabel>{props.label}</FormLabel>
-          <FormControl>
-            <Input
-              placeholder={props.placeholder}
-              type={props.type || 'text'}
-              {...field}
-            />
-          </FormControl>
-          {/* <FormDescription>
+      render={({ field }) => {
+        // console.log(field.value);
+        return (
+          <FormItem className="w-full">
+            <FormLabel>{props.label}</FormLabel>
+            <FormControl>
+              <Input
+                {...field}
+                placeholder={props.placeholder}
+                type={props.type || 'text'}
+              />
+            </FormControl>
+            {/* <FormDescription>
                 This is your public display name.
               </FormDescription> */}
-          <FormMessage />
-        </FormItem>
-      )}
+            <FormMessage />
+          </FormItem>
+        );
+      }}
     />
   );
 };

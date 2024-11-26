@@ -70,6 +70,7 @@ const Page = () => {
               control={form.control}
               name="email"
               label="Email"
+              type="email"
               placeholder="Enter your email"
             />
 
@@ -77,11 +78,13 @@ const Page = () => {
               control={form.control}
               name="password"
               label="Password"
+              type="password"
               placeholder="Enter your password"
             />
             <div className="flex space-x-2 text-sm">
               <p>Don&apos;t have an account? </p>
               <button
+                type="button"
                 onClick={() => router.push('/auth/register')}
                 className="hover:opacity-75"
               >
