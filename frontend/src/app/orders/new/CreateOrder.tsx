@@ -9,22 +9,31 @@ import { Input } from '@/components/ui/input';
 import { citiesData, transportVehicles } from '@/utils/data';
 import { createOrderSchema } from '@/utils/validationSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { LatLng } from 'leaflet';
 import React from 'react';
 import { Form, FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+export interface Location {
+  position: LatLng;
+  address: string;
+}
 const CreateOrder = () => {
+  const [pickupLocation, setPickupLocation] = React.useState<Location | null>(
+    null
+  );
+  const [dropLocation, setDropLocation] = React.useState<Location | null>(null);
   const form = useForm<z.infer<typeof createOrderSchema>>({
     mode: 'onChange',
     resolver: zodResolver(createOrderSchema),
     defaultValues: {
-      pickup_location: '',
-      dropoff_location: '',
       city: '',
       vehicle_type: '',
       weight_kg: 0,
     },
   });
+
+  console.log(form);
 
   function onSubmit(data: z.infer<typeof createOrderSchema>) {
     console.log(data);
@@ -40,13 +49,11 @@ const CreateOrder = () => {
             className="w-11/12 md:w-7/12 lg:w-3/12 h-full justify-center flex flex-col space-y-8"
           >
             <MapInput
-              control={form.control}
-              setLocation={form.setValue}
+              location={pickupLocation}
+              setLocation={setPickupLocation}
               name="pickup_location"
               label="Pickup Location"
               placeholder="--Pickup Location--"
-              type="text"
-              selectedLocation={form.getValues('pickup_location')}
             />
 
             <CustomSelect

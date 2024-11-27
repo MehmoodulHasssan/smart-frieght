@@ -20,8 +20,6 @@ const driverRegisterSchema = z.object({
 });
 
 const createOrderSchema = z.object({
-  pickup_location: z.string(),
-  dropoff_location: z.string(),
   weight_kg: z.number(),
   vehicle_type: z.string(),
   city: z.string(),

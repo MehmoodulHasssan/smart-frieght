@@ -1,4 +1,5 @@
 const API_DOMAIN = 'http://localhost:8000/api';
+const MAP_API_DOMAIN = 'https://nominatim.openstreetmap.org';
 
 const API_ROUTES = {
   AUTH: {
@@ -21,4 +22,4 @@ const API_ROUTES = {
   },
 };
 
-export { API_ROUTES, API_DOMAIN };
+export { API_ROUTES, API_DOMAIN, MAP_API_DOMAIN };
