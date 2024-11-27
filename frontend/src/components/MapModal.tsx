@@ -46,7 +46,7 @@ const customIcon = new Icon({
   popupAnchor: [0, -32], // Adjust the popup position
 });
 
-function LocationMarker({ position }: { position: LatLng | null }) {
+function LocationMarker({ location }: { location: Location | null }) {
   // const map = useMapEvents({
   //   // triggerd by click event on map
   //   click(e) {
@@ -67,14 +67,17 @@ function LocationMarker({ position }: { position: LatLng | null }) {
   // });
   const map = useMap();
   useEffect(() => {
-    if (position) {
-      console.log(position);
-      map.flyTo(position, 16);
+    if (location) {
+      console.log(location);
+      map.flyTo(location?.position, 16);
     }
-  }, [position, map]);
-  return position ? (
-    <Marker position={[position.lat, position.lng]} icon={customIcon}>
-      <Popup>You are here</Popup>
+  }, [location, map]);
+  return location ? (
+    <Marker
+      position={[location?.position.lat, location?.position.lng]}
+      icon={customIcon}
+    >
+      <Popup></Popup>
     </Marker>
   ) : null;
 }
@@ -177,6 +180,7 @@ const Map: React.FC<MapProps> = ({
             } text-center flex-shrink-0`}
             onClick={location ? handleChangeLocation : handleSearchSubmit}
             size={'icon'}
+            title={location ? 'Change location' : 'Search a place'}
             disabled={isLoading}
           >
             {!isLoading &&
@@ -232,7 +236,7 @@ const Map: React.FC<MapProps> = ({
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            <LocationMarker position={location ? location.position : null} />
+            <LocationMarker location={location ? location : null} />
           </MapContainer>
         }
       </div>

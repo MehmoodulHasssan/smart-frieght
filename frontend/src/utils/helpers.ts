@@ -15,4 +15,11 @@ const attributeToLabel = (attribute: string) => {
   return label;
 };
 
-export { attributeToLabel };
+const limitString = (string: string, limit: number) => {
+  if (string.length > limit) {
+    return string.slice(0, limit) + '...';
+  }
+  return string;
+};
+
+export { attributeToLabel, limitString };

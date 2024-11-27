@@ -20,7 +20,7 @@ const driverRegisterSchema = z.object({
 });
 
 const createOrderSchema = z.object({
-  weight_kg: z.number(),
+  weight_kg: z.string().regex(/^\d+$/, 'Must be a number greater than 0'),
   vehicle_type: z.string(),
   city: z.string(),
 });
