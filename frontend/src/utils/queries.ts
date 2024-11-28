@@ -1,16 +1,29 @@
 import { apiCall } from './apiCall';
-import { MAP_API_DOMAIN } from '@/apiConfig';
+import { API_ROUTES, MAP_API_DOMAIN } from '@/apiConfig';
 
 const getAddress = async (address: string): Promise<OSMPlaceResponse> => {
   const urlEncodedAddress = encodeURIComponent(address);
   const response = await apiCall(
     `${MAP_API_DOMAIN}/search?q=${urlEncodedAddress}&format=jsonv2`,
-    'GET'
+    'GET',
+    undefined,
+    undefined,
+    true
   );
   console.log(response);
   return response;
   // const response = await fetch(`${MAP_API_DOMAIN}/search?q=${address}&format=jsonv2&addressdetails=1&limit=1&polygon=1&extratags=1`);
 };
+
+const getAllVehicles = async () => {
+  return await apiCall(API_ROUTES.PUBLIC.GET_ALL_VEHICLES, 'GET');
+};
+
+const getConsignorOrders = async () => {
+  return await apiCall(API_ROUTES.CONSIGNOR.GET_ALL_ORDERS, 'GET');
+};
+
+export { getAddress, getAllVehicles, getConsignorOrders };
 
 export interface OSMPlace {
   place_id: number;
@@ -30,5 +43,3 @@ export interface OSMPlace {
 }
 
 type OSMPlaceResponse = OSMPlace[];
-
-export { getAddress };

@@ -2,8 +2,8 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 // Define vehicle status as an enum
 enum VehicleStatus {
-  AVAILABLE = 'available',
-  IN_TRANSIT = 'in_transit',
+  AVAILABLE = 'AVAILABLE',
+  IN_TRANSIT = 'IN_TRANSIT',
 }
 
 // Define the vehicle interface that extends Document
@@ -13,6 +13,7 @@ interface IVehicle extends Document {
   capacity: number; // Vehicle capacity (weight)
   status: VehicleStatus; // Availability status
   avg_fuel_consumption: number; // Fuel consumption per kilometer
+  notes?: string;
   createdAt: Date; // Created timestamp
   updatedAt: Date; // Updated timestamp
 }
@@ -42,6 +43,9 @@ const vehicleSchema: Schema<IVehicle> = new Schema(
     avg_fuel_consumption: {
       type: Number,
       required: true,
+    },
+    notes: {
+      type: String,
     },
   },
   {

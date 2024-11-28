@@ -14,11 +14,15 @@ const API_ROUTES = {
     GET_ALL_ORDERS: API_DOMAIN + '/driver/get-all-orders',
   },
   CONSIGNOR: {
-    CREATE_ORDER: API_DOMAIN + '/consignor/create-order',
+    PLACE_ORDER: API_DOMAIN + '/consignor/place-order',
     GET_ALL_ORDERS: API_DOMAIN + '/consignor/get-all-orders',
   },
   ADMIN: {
     GET_ALL_ORDERS: API_DOMAIN + '/admin/get-all-orders',
+  },
+  PUBLIC: {
+    GET_ALL_VEHICLES: API_DOMAIN + '/all-vehicles',
+    GET_ALL_CITIES: API_DOMAIN + '/all-cities',
   },
 };
 

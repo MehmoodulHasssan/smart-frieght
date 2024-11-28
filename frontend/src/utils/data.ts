@@ -1,7 +1,7 @@
 const navData = [
   { title: 'Home', href: '/' },
   { title: 'Place an order', href: '/orders/new' },
-  { title: 'My orders', href: '/orders' },
+  { title: 'My orders', href: '/orders/consignor' },
   { title: 'About', href: '/about' },
   { title: 'Contact Us', href: '/contact-us' },
 ];

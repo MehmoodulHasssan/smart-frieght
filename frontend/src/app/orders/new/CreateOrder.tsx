@@ -5,34 +5,55 @@ import CustomSelect from '@/components/CustomSelect';
 import Header from '@/components/Header';
 import MapInput from '@/components/MapInput';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { citiesData, transportVehicles } from '@/utils/data';
+import { City, Vehicle } from '@/utils/interfaces';
+import { placeOrder } from '@/utils/mutations/consignorMutations';
 import { createOrderSchema } from '@/utils/validationSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { LatLng } from 'leaflet';
-import { title } from 'process';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { Form, FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+interface PropTypes {
+  citiesData: City[];
+  vehiclesData: Vehicle[];
+}
 export interface Location {
   position: LatLng;
   address: string;
 }
-const CreateOrder = () => {
+const CreateOrder = ({ citiesData, vehiclesData }: PropTypes) => {
   const [pickupLocation, setPickupLocation] = React.useState<Location | null>(
     null
   );
   const [dropLocation, setDropLocation] = React.useState<Location | null>(null);
   const { toast } = useToast();
+  const router = useRouter();
+  const { mutate, isPending } = useMutation({
+    mutationKey: ['createOrder'],
+    mutationFn: placeOrder,
+    onSuccess: () => {
+      toast({
+        title: 'Success',
+        description: 'Order placed successfully',
+      });
+      form.reset();
+      router.push('/');
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
   const form = useForm<z.infer<typeof createOrderSchema>>({
     mode: 'onChange',
     resolver: zodResolver(createOrderSchema),
     defaultValues: {
       city: '',
       vehicle_type: '',
-      weight_kg: '',
+      weight: '',
     },
   });
 
@@ -44,12 +65,16 @@ const CreateOrder = () => {
       });
       return;
     }
-    console.log({
+    const reqData = {
       pickup_location: pickupLocation,
       dropoff_location: dropLocation,
-      ...data,
-    });
+      weight: data.weight,
+      city_id: data.city,
+      vehicle_id: data.vehicle_type,
+    };
+    mutate(reqData);
   }
+  // console.log(vehiclesData);
   return (
     <>
       <Header />
@@ -79,7 +104,9 @@ const CreateOrder = () => {
               control={form.control}
               name="vehicle_type"
               label="Vehicle Type"
-              selectItems={transportVehicles}
+              selectItems={vehiclesData}
+              displayAttribute="vehicle_model"
+              valueAttribute="_id"
               placeholder="--Select a Vehicle Type--"
             />
             <CustomSelect
@@ -87,17 +114,21 @@ const CreateOrder = () => {
               name="city"
               label="City"
               selectItems={citiesData}
+              displayAttribute="name"
+              valueAttribute="_id"
               placeholder="--Select a City--"
             />
 
             <CustomFormField
               control={form.control}
-              name="weight_kg"
+              name="weight"
               label="Weight (kg)"
               type="number"
               placeholder="Enter Weight in kg"
             />
-            <Button type="submit">Submit order</Button>
+            <Button type="submit" disabled={isPending}>
+              {isPending ? 'Submitting...' : 'Submit order'}
+            </Button>
           </form>
         </FormProvider>
       </div>

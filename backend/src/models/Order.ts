@@ -13,8 +13,8 @@ interface IOrder extends Document {
   consignor_id: mongoose.Types.ObjectId; // Reference to consignor in Users table
   driver_id: mongoose.Types.ObjectId; // Reference to driver in Users table
   vehicle_id: mongoose.Types.ObjectId; // Reference to vehicle in Vehicles table
-  pickup_location: string; // Location for pickup
-  dropoff_location: string; // Location for dropoff
+  pickup_location_id: mongoose.Types.ObjectId; // Location for pickup
+  dropoff_location_id: mongoose.Types.ObjectId; // Location for dropoff
   status: OrderStatus; // Order status
   pickup_time?: Date; // Expected or actual pickup time
   dropoff_time?: Date; // Expected or actual dropoff time
@@ -35,7 +35,6 @@ const orderSchema: Schema<IOrder> = new Schema(
     },
     driver_id: {
       type: Schema.Types.ObjectId,
-      required: true,
       ref: 'User', // Reference to the Users table
     },
     vehicle_id: {
@@ -43,12 +42,14 @@ const orderSchema: Schema<IOrder> = new Schema(
       required: true,
       ref: 'Vehicle', // Reference to the Vehicles table
     },
-    pickup_location: {
-      type: String,
+    pickup_location_id: {
+      type: Schema.Types.ObjectId,
+      ref: 'Location',
       required: true,
     },
-    dropoff_location: {
-      type: String,
+    dropoff_location_id: {
+      type: Schema.Types.ObjectId,
+      ref: 'Location',
       required: true,
     },
     status: {

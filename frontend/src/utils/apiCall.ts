@@ -1,5 +1,4 @@
 import axios, { AxiosResponse } from 'axios';
-// axios.defaults.withCredentials = true;
 
 export interface ApiResponse {
   status: 'success' | 'error';
@@ -27,7 +26,8 @@ export const apiCall = async (
   url: string,
   method: 'GET' | 'POST' | 'PUT' | 'DELETE',
   data?: any,
-  token?: string
+  token?: string,
+  withoutcredentials?: boolean
 ) => {
   const headers = {
     Authorization: token ? `Bearer ${token}` : '',
@@ -36,6 +36,12 @@ export const apiCall = async (
 
   if (data && data instanceof FormData) {
     headers['Content-Type'] = 'multipart/form-data';
+  }
+
+  if (withoutcredentials) {
+    axios.defaults.withCredentials = false;
+  } else {
+    axios.defaults.withCredentials = true;
   }
 
   try {

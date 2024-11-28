@@ -17,17 +17,15 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Control, FieldValues, Path, UseFormReturn } from 'react-hook-form';
-import { Input } from '@/components/ui/input';
-import { attributeToLabel } from '@/utils/helpers';
-
-type Item<T = object> = T & { name: string };
 
 interface GenericFormFieldProps<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
   label: string;
-  selectItems: Item[];
   placeholder?: string;
+  displayAttribute: string;
+  valueAttribute: string;
+  selectItems: any[];
   type?: React.HTMLInputTypeAttribute | undefined;
 }
 
@@ -39,6 +37,7 @@ interface GenericFormFieldProps<T extends FieldValues> {
 const CustomSelect = <T extends FieldValues>(
   props: GenericFormFieldProps<T>
 ) => {
+  console.log(props.selectItems[0][props.displayAttribute]);
   return (
     <FormField
       control={props.control}
@@ -53,8 +52,11 @@ const CustomSelect = <T extends FieldValues>(
               </SelectTrigger>
               <SelectContent>
                 {props.selectItems.map((item) => (
-                  <SelectItem key={item.name} value={item.name}>
-                    {item.name}
+                  <SelectItem
+                    key={item[props.valueAttribute]}
+                    value={item[props.valueAttribute]}
+                  >
+                    {item[props.displayAttribute]}
                   </SelectItem>
                 ))}
               </SelectContent>
