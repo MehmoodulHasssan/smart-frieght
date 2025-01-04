@@ -70,7 +70,8 @@ const consignorRegisterController = async (
     }
     const { full_name, email, phone_number, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne().where('email').equals(email);
+
     if (user) {
       return next(ApiError.badRequest('This email is already registerd'));
     }

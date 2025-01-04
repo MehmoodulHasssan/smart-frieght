@@ -22,11 +22,12 @@ import {
   PathOptions,
   latLngBounds,
 } from 'leaflet';
-import { Input } from './ui/input';
-import { Button } from './ui/button';
+import { decode, encode } from 'polyline';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
 import { IoClose, IoSearchOutline } from 'react-icons/io5';
 import { useTheme } from '@/context/themeContext';
-import { ScrollArea } from './ui/scroll-area';
+import { ScrollArea } from '../ui/scroll-area';
 import useFetch from '@/hooks/useFetch';
 import { useQuery } from '@tanstack/react-query';
 import { getAddress, OSMPlace } from '@/utils/queries';
@@ -34,10 +35,12 @@ import leafletMarker from 'leaflet/dist/images/marker-icon-2x.png';
 import { UseFormReturn } from 'react-hook-form';
 import { Location } from '@/app/orders/new/CreateOrder';
 import { LiaExchangeAltSolid } from 'react-icons/lia';
+import MapModalWrapper from './MapModalWrapper';
+import CloseButton from '../CloseButton';
 
 const center = [30.3753, 69.3451]; // Approximate center of Pakistan
 
-const customIcon = new Icon({
+export const customLocationIcon = new Icon({
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   iconUrl: 'https://cdn-icons-png.flaticon.com/512/2991/2991231.png', // Default marker icon URL
 
@@ -45,6 +48,20 @@ const customIcon = new Icon({
   iconAnchor: [16, 32], // Anchor the icon at the bottom
   popupAnchor: [0, -32], // Adjust the popup position
 });
+
+// Custom component to fit map to polyline
+const FitToPolyLine: React.FC<{ positions: any }> = ({ positions }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (positions && positions.length > 0) {
+      // const bounds = positions.map(([lat, lng]) => [lat, lng]);
+      map.fitBounds(positions);
+    }
+  }, [map, positions]);
+
+  return null;
+};
 
 function LocationMarker({ location }: { location: Location | null }) {
   // const map = useMapEvents({
@@ -66,16 +83,18 @@ function LocationMarker({ location }: { location: Location | null }) {
 
   // });
   const map = useMap();
+
   useEffect(() => {
     if (location) {
       console.log(location);
       map.flyTo(location?.position, 16);
     }
   }, [location, map]);
+
   return location ? (
     <Marker
       position={[location?.position.lat, location?.position.lng]}
-      icon={customIcon}
+      icon={customLocationIcon}
     >
       <Popup></Popup>
     </Marker>
@@ -139,108 +158,84 @@ const Map: React.FC<MapProps> = ({
     }
   }, []);
 
-  // React.useEffect(() => {
-  //   if (!mapRef.current) return;
-
-  //   // Clean up map instance when modal is closed
-  //   return () => {
-  //     if (mapRef.current) {
-  //       mapRef.current.leafletElement.remove();
-  //       mapRef.current = null;
-  //     }
-  //   };
-  // }, []);
-
   return (
-    <div
-      style={{ marginTop: 0 }}
-      className={`fixed top-0 left-0 flex justify-center items-center bg-opacity-70 z-50 bg-black h-dvh w-dvw`}
-    >
-      <div
-        className={`relative flex p-10 ${
-          theme == 'dark' ? 'bg-black' : 'bg-white'
-        } flex-col gap-2 w-2/4 h-3/4 border ${
-          theme == 'dark' ? 'border-x-slate-200' : 'border-slate-900'
-        } rounded-lg`}
-      >
-        <div
-          onClick={() => setOpen(false)}
-          className="absolute top-1 right-1 p-1 w-8 aspect-square flex items-center justify-center hover:cursor-pointer"
+    <MapModalWrapper>
+      <CloseButton onClick={() => setOpen(false)} />
+      <div className="h-10 w-full relative flex">
+        <Button
+          variant={'outline'}
+          className={`${
+            theme == 'dark' ? 'bg-black' : 'bg-white'
+          } text-center flex-shrink-0`}
+          onClick={location ? handleChangeLocation : handleSearchSubmit}
+          size={'icon'}
+          title={location ? 'Change location' : 'Search a place'}
+          disabled={isLoading}
         >
-          <IoClose
-            fill={theme == 'dark' ? 'white' : 'black'}
-            className="text-lg"
-          />
-        </div>
-        <div className="h-10 w-full relative flex">
-          <Button
-            variant={'outline'}
-            className={`${
-              theme == 'dark' ? 'bg-black' : 'bg-white'
-            } text-center flex-shrink-0`}
-            onClick={location ? handleChangeLocation : handleSearchSubmit}
-            size={'icon'}
-            title={location ? 'Change location' : 'Search a place'}
-            disabled={isLoading}
-          >
-            {!isLoading &&
-              (location ? (
-                <LiaExchangeAltSolid fill={theme == 'dark' ? 'white' : ''} />
-              ) : (
-                <IoSearchOutline fill={theme == 'dark' ? 'white' : ''} />
-              ))}
-            {isLoading && <span className="loader"></span>}
-          </Button>
-          <Input
-            className="w-full flex-grow"
-            ref={inputRef}
-            placeholder="Search a place"
-          />
-          <div
-            className={`absolute top-10 w-full left-0 z-50 ${
-              theme == 'dark' ? 'bg-black' : 'bg-white'
-            }`}
-          >
-            {showSearchResults && data && (
-              <ScrollArea className="h-72 w-full rounded-md border">
-                <div className="p-4">
-                  {data.length > 0 &&
-                    data.map((addressNode) => (
-                      <div
-                        key={addressNode.osm_id}
-                        className="text-sm flex items-center justify-start p-2 rounded-md hover:bg-gray-300 hover:cursor-pointer"
-                        onClick={() => handleClickNode(addressNode)}
-                      >
-                        <p>{addressNode.display_name}</p>
-                      </div>
-                    ))}
-                  {data.length == 0 && (
-                    <div className="text-sm flex items-center justify-start p-2 rounded-md hover:bg-gray-300 hover:cursor-pointer">
-                      <p className="text-red-500">No results found</p>
+          {!isLoading &&
+            (location ? (
+              <LiaExchangeAltSolid fill={theme == 'dark' ? 'white' : ''} />
+            ) : (
+              <IoSearchOutline fill={theme == 'dark' ? 'white' : ''} />
+            ))}
+          {isLoading && <span className="loader"></span>}
+        </Button>
+        <Input
+          className="w-full flex-grow"
+          ref={inputRef}
+          placeholder="Search a place"
+        />
+        <div
+          className={`absolute top-10 w-full left-0 z-50 ${
+            theme == 'dark' ? 'bg-black' : 'bg-white'
+          }`}
+        >
+          {showSearchResults && data && (
+            <ScrollArea className="h-72 w-full rounded-md border">
+              <div className="p-4">
+                {data.length > 0 &&
+                  data.map((addressNode) => (
+                    <div
+                      key={addressNode.osm_id}
+                      className="text-sm flex items-center justify-start p-2 rounded-md hover:bg-gray-300 hover:cursor-pointer"
+                      onClick={() => handleClickNode(addressNode)}
+                    >
+                      <p>{addressNode.display_name}</p>
                     </div>
-                  )}
-                </div>
-              </ScrollArea>
-            )}
-          </div>
+                  ))}
+                {data.length == 0 && (
+                  <div className="text-sm flex items-center justify-start p-2 rounded-md hover:bg-gray-300 hover:cursor-pointer">
+                    <p className="text-red-500">No results found</p>
+                  </div>
+                )}
+              </div>
+            </ScrollArea>
+          )}
         </div>
-        {
-          <MapContainer
-            style={{ height: '100%', width: '100%', zIndex: 10 }}
-            center={center as LatLngExpression}
-            zoom={5}
-            // ref={mapRef}
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-
-            <LocationMarker location={location ? location : null} />
-          </MapContainer>
-        }
       </div>
-    </div>
+      {
+        <MapContainer
+          style={{ height: '100%', width: '100%', zIndex: 10 }}
+          center={center as LatLngExpression}
+          zoom={5}
+          // ref={mapRef}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          <Polyline
+            // pathOptions={{ color: 'blue' } as PathOptions}
+            positions={
+              decode(
+                '_`q~Dmlh}LyEaFbAkB_B{GiGTueCnnDeBbKyQzOyDp@}Jg@aA~@|@|PqOjUnM`NoKdOHjAkAS'
+              ) as LatLngExpression[]
+            }
+          />
+          {/* <LocationMarker location={location ? location : null} /> */}
+        </MapContainer>
+      }
+    </MapModalWrapper>
   );
 };
 

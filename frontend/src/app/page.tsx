@@ -1,6 +1,6 @@
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
-import { useTheme } from '@/context/themeContext';
+import TestClinetCom from '@/components/TestClinetCom';
 import React from 'react';
 
 const page = () => {
@@ -8,6 +8,7 @@ const page = () => {
     <>
       <Header />
       <Hero />
+      <TestClinetCom />
     </>
   );
 };

@@ -3,7 +3,7 @@
 import CustomFormField from '@/components/CustomFormField';
 import CustomSelect from '@/components/CustomSelect';
 import Header from '@/components/Header';
-import MapInput from '@/components/MapInput';
+import MapInput from '@/components/map-subcomponents/MapInput';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { City, Vehicle } from '@/utils/interfaces';

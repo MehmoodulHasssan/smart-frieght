@@ -10,9 +10,9 @@ import { City, Vehicle } from '@/utils/interfaces';
 const Page = async () => {
   const cookieStore = await cookies();
   const token = cookieStore.get('token');
-  console.log(token);
+  // console.log(token);
   if (!token?.value) return redirect('/auth/login');
-  console.log('reached');
+  // console.log('reached');
   try {
     const vehiclesResponse: IVehicleRespose = await apiCall(
       API_ROUTES.PUBLIC.GET_ALL_VEHICLES,

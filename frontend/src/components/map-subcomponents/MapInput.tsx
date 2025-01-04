@@ -23,6 +23,7 @@ const MapInput = (props: LocationInputProps) => {
   const [mapModalOpen, setMapModalOpen] = React.useState(false);
   const [showToolTip, setShowToolTip] = React.useState(false);
   const { theme } = useTheme();
+
   const handleOpenMap = () => {
     setMapModalOpen(true);
   };

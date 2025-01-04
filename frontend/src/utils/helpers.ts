@@ -1,3 +1,6 @@
+import { LatLngExpression } from 'leaflet';
+import { decode } from 'polyline';
+
 const attributeToLabel = (attribute: string) => {
   let label: string = '';
   if (attribute.includes('_')) {
@@ -22,4 +25,16 @@ const limitString = (string: string, limit: number) => {
   return string;
 };
 
-export { attributeToLabel, limitString };
+const safeDecode = (encodedString: string) => {
+  try {
+    // Attempt to decode the polyline
+    const decoded = decode(encodedString);
+    return decoded as LatLngExpression[];
+  } catch (error: any) {
+    console.error('Failed to decode polyline:', error.message);
+    // Return a fallback value (e.g., null or empty array)
+    return [];
+  }
+};
+
+export { attributeToLabel, limitString, safeDecode };
