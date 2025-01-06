@@ -1,5 +1,5 @@
 'use client';
-import {
+import React, {
   createContext,
   useContext,
   useEffect,
@@ -11,7 +11,7 @@ type Theme = 'light' | 'dark';
 type ThemeContextType = {
   theme: Theme;
   toggleTheme: () => void;
-  setTheme: (theme: Theme) => void;
+  setTheme: React.Dispatch<React.SetStateAction<Theme>>;
 };
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);

@@ -79,6 +79,10 @@ const MapRouteModal = ({ setOpen, from, geometry, to }: PropTypes) => {
         <Polyline
           // pathOptions={{ color: 'blue' } as PathOptions}
           positions={bounds}
+          pathOptions={{
+            weight: 7,
+            // color: 'blue',
+          }}
         />
         <FitToPolyLine positions={bounds} />
         {from && <LocationMarker location={from} />}

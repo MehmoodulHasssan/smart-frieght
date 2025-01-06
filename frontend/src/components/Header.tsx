@@ -18,6 +18,7 @@ const Header = () => {
   const { theme } = useTheme();
   const { toast } = useToast();
   const { currentUser, setCurrentUser } = useAuthContext();
+  const router = useRouter();
   const { mutate, isPending } = useMutation({
     mutationKey: ['logoutUser'],
     mutationFn: logoutUser,
@@ -37,7 +38,6 @@ const Header = () => {
       });
     },
   });
-  const router = useRouter();
 
   const handleClick = () => {
     if (currentUser) {

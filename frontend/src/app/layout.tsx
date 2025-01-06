@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { ThemeProvider } from '@/context/themeContext';
 import ThemedWrapper from '@/components/ThemedWrapper';
 import ContextWrapper from '@/components/ContextWrapper';
 

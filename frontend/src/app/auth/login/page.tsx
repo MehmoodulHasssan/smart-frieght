@@ -13,7 +13,6 @@ import { useMutation } from '@tanstack/react-query';
 import { loginUser } from '@/utils/mutations/authMutations';
 import { useAuthContext } from '@/context/authContext';
 import { useToast } from '@/hooks/use-toast';
-import { title } from 'process';
 import { ApiError } from '@/utils/apiCall';
 
 // Infer form data type from Zod schema
@@ -26,12 +25,15 @@ const Page = () => {
     mutationKey: ['login'],
     mutationFn: loginUser,
     onSuccess: (data) => {
-      console.log(data);
       setCurrentUser(data.data);
       toast({
         title: 'Success',
         description: data.message,
       });
+      if (data.data.role === 'admin') {
+        router.push('/admin');
+        return;
+      }
       router.push('/');
     },
     onError: (error: ApiError) => {

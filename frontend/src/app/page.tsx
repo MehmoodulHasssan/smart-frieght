@@ -8,7 +8,7 @@ const page = () => {
     <>
       <Header />
       <Hero />
-      <TestClinetCom />
+      {/* <TestClinetCom /> */}
     </>
   );
 };

@@ -49,20 +49,6 @@ export const customLocationIcon = new Icon({
   popupAnchor: [0, -32], // Adjust the popup position
 });
 
-// Custom component to fit map to polyline
-const FitToPolyLine: React.FC<{ positions: any }> = ({ positions }) => {
-  const map = useMap();
-
-  useEffect(() => {
-    if (positions && positions.length > 0) {
-      // const bounds = positions.map(([lat, lng]) => [lat, lng]);
-      map.fitBounds(positions);
-    }
-  }, [map, positions]);
-
-  return null;
-};
-
 function LocationMarker({ location }: { location: Location | null }) {
   // const map = useMapEvents({
   //   // triggerd by click event on map
@@ -224,15 +210,7 @@ const Map: React.FC<MapProps> = ({
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <Polyline
-            // pathOptions={{ color: 'blue' } as PathOptions}
-            positions={
-              decode(
-                '_`q~Dmlh}LyEaFbAkB_B{GiGTueCnnDeBbKyQzOyDp@}Jg@aA~@|@|PqOjUnM`NoKdOHjAkAS'
-              ) as LatLngExpression[]
-            }
-          />
-          {/* <LocationMarker location={location ? location : null} /> */}
+          <LocationMarker location={location ? location : null} />
         </MapContainer>
       }
     </MapModalWrapper>
