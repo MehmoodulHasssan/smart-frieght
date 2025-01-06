@@ -1,8 +1,8 @@
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 
 export const users = Array.from({ length: 20 }, () => {
-  const firstName = faker.person.firstName()
-  const lastName = faker.person.lastName()
+  const firstName = faker.person.firstName();
+  const lastName = faker.person.lastName();
   return {
     id: faker.string.uuid(),
     firstName,
@@ -26,5 +26,5 @@ export const users = Array.from({ length: 20 }, () => {
     ]),
     createdAt: faker.date.past(),
     updatedAt: faker.date.recent(),
-  }
-})
+  };
+});

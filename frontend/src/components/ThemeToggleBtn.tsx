@@ -1,12 +1,12 @@
-import { useTheme } from '@/context/themeContext';
+import { useTheme } from '@/context/theme-context';
 import React from 'react';
 import { LuMoon, LuSun } from 'react-icons/lu';
 
 const ThemeToggleBtn = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   return (
     <button
-      onClick={() => toggleTheme()}
+      onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
       className={`w-10 aspect-square flex items-center justify-center p-1 rounded-lg ${
         theme === 'light'
           ? ' hover:bg-gray-300 active:bg-gray-300'

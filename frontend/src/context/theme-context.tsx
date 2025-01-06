@@ -1,3 +1,4 @@
+'use client';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 type Theme = 'dark' | 'light' | 'system';
@@ -26,10 +27,14 @@ export function ThemeProvider({
   storageKey = 'vite-ui-theme',
   ...props
 }: ThemeProviderProps) {
-  const [theme, _setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-  );
-
+  const [theme, _setTheme] = useState<Theme>(defaultTheme);
+  // const [theme, _setTheme] = useState<Theme>(
+  //   () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
+  // );
+  useEffect(() => {
+    const storedTheme = localStorage.getItem(storageKey) as Theme | null;
+    if (storedTheme) _setTheme(storedTheme);
+  }, []);
   useEffect(() => {
     const root = window.document.documentElement;
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');

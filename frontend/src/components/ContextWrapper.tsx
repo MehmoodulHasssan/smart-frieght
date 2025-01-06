@@ -1,5 +1,5 @@
 'use client';
-import { ThemeProvider } from '@/context/themeContext';
+import { ThemeProvider } from '@/context/theme-context';
 import React from 'react';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { AuthContextProvider } from '@/context/authContext';
@@ -10,7 +10,9 @@ const ContextWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <QueryClientProvider client={client}>
       <AuthContextProvider>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider storageKey="smart-frieght-theme">
+          {children}
+        </ThemeProvider>
       </AuthContextProvider>
     </QueryClientProvider>
   );

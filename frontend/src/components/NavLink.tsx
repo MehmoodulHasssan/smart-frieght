@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Link, { LinkProps } from 'next/link';
-import { useTheme } from '@/context/themeContext';
+import { useTheme } from '@/context/theme-context';
 import { usePathname } from 'next/navigation';
 
 interface Props extends LinkProps {

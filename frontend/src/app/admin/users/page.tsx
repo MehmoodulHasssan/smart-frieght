@@ -1,15 +1,17 @@
+'use client';
 import { Header } from '@/components/layout/header';
 import { Main } from '@/components/layout/main';
 import { ProfileDropdown } from '@/components/profile-dropdown';
 import { Search } from '@/components/search';
-import { columns } from './components/users-columns';
-import { UsersDialogs } from './components/users-dialogs';
-import { UsersPrimaryButtons } from './components/users-primary-buttons';
-import { UsersTable } from './components/users-table';
-import UsersProvider from './context/users-context';
-import { userListSchema } from './data/schema';
-import { users } from './data/users';
+import { columns } from '@/components/dashboardfeatures/users/components/users-columns';
+import { UsersDialogs } from '@/components/dashboardfeatures/users/components/users-dialogs';
+import { UsersPrimaryButtons } from '@/components/dashboardfeatures/users/components/users-primary-buttons';
+import { UsersTable } from '@/components/dashboardfeatures/users/components/users-table';
+import UsersProvider from '@/components/dashboardfeatures/users/context/users-context';
+import { userListSchema } from '@/components/dashboardfeatures/users/data/schema';
+import { users } from '@/components/dashboardfeatures/users/data/users';
 import ThemeToggleBtn from '@/components/ThemeToggleBtn';
+import { ThemeSwitch } from '@/components/theme-switch';
 
 export default function Users() {
   // Parse user list
@@ -20,7 +22,7 @@ export default function Users() {
       <Header fixed>
         <Search />
         <div className="ml-auto flex items-center space-x-4">
-          <ThemeToggleBtn />
+          <ThemeSwitch />
           <ProfileDropdown />
         </div>
       </Header>

@@ -1,5 +1,5 @@
 'use client';
-import { useTheme } from '@/context/themeContext';
+import { useTheme } from '@/context/theme-context';
 import Image from 'next/image';
 import React from 'react';
 import GradientButton from './GradientButton';

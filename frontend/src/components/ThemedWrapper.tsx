@@ -1,5 +1,5 @@
 'use client';
-import { useTheme } from '@/context/themeContext';
+import { useTheme } from '@/context/myThemeContext';
 import React from 'react';
 import { Toaster } from '@/components/ui/toaster';
 
