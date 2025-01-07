@@ -1,4 +1,4 @@
-import { useTheme } from '@/context/myThemeContext';
+import { useTheme } from '@/context/theme-context';
 import React from 'react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

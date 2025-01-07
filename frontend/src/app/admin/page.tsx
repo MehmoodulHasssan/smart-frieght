@@ -36,16 +36,16 @@ export default function Dashboard() {
       <Main>
         <div className="mb-2 flex items-center justify-between space-y-2">
           <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
-          <div className="flex items-center space-x-2">
+          {/* <div className="flex items-center space-x-2">
             <Button>Download</Button>
-          </div>
+          </div> */}
         </div>
         <Tabs
           orientation="vertical"
           defaultValue="overview"
           className="space-y-4"
         >
-          <div className="w-full overflow-x-auto pb-2">
+          {/* <div className="w-full overflow-x-auto pb-2">
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="analytics" disabled>
@@ -58,7 +58,7 @@ export default function Dashboard() {
                 Notifications
               </TabsTrigger>
             </TabsList>
-          </div>
+          </div> */}
           <TabsContent value="overview" className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <Card>

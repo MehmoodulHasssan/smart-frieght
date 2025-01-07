@@ -22,9 +22,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { User } from '../data/schema';
+// import { User } from '../data/schema'
 import { DataTablePagination } from './data-table-pagination';
 import { DataTableToolbar } from './data-table-toolbar';
+import { IVehicleRes } from '@/utils/queries';
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -34,11 +35,11 @@ declare module '@tanstack/react-table' {
 }
 
 interface DataTableProps {
-  columns: ColumnDef<User>[];
-  data: User[];
+  columns: ColumnDef<IVehicleRes['data'][number]>[];
+  data: IVehicleRes['data'];
 }
 
-export function UsersTable({ columns, data }: DataTableProps) {
+export function VehiclesTable({ columns, data }: DataTableProps) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);

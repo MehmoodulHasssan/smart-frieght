@@ -60,16 +60,21 @@ export const sidebarData: SidebarData = {
           icon: IconChecklist,
         },
         {
-          title: 'Apps',
-          url: '/admin/apps',
-          icon: IconPackages,
+          title: 'Vehicles',
+          url: '/admin/vehicles',
+          icon: GalleryVerticalEnd,
         },
-        {
-          title: 'Chats',
-          url: '/admin/chats',
-          badge: '3',
-          icon: IconMessages,
-        },
+        // {
+        //   title: 'Apps',
+        //   url: '/admin/apps',
+        //   icon: IconPackages,
+        // },
+        // {
+        //   title: 'Chats',
+        //   url: '/admin/chats',
+        //   badge: '3',
+        //   icon: IconMessages,
+        // },
         {
           title: 'Users',
           url: '/admin/users',
