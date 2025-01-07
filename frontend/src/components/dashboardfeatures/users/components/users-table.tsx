@@ -25,6 +25,7 @@ import {
 import { User } from '../data/schema';
 import { DataTablePagination } from './data-table-pagination';
 import { DataTableToolbar } from './data-table-toolbar';
+import { IUserRes } from '@/utils/queries';
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -34,8 +35,8 @@ declare module '@tanstack/react-table' {
 }
 
 interface DataTableProps {
-  columns: ColumnDef<User>[];
-  data: User[];
+  columns: ColumnDef<IUserRes['data'][number]>[];
+  data: IUserRes['data'];
 }
 
 export function UsersTable({ columns, data }: DataTableProps) {

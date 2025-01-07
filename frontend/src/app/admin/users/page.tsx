@@ -12,10 +12,23 @@ import { userListSchema } from '@/components/dashboardfeatures/users/data/schema
 import { users } from '@/components/dashboardfeatures/users/data/users';
 import ThemeToggleBtn from '@/components/ThemeToggleBtn';
 import { ThemeSwitch } from '@/components/theme-switch';
+import { useAuthContext } from '@/context/authContext';
+import { useQuery } from '@tanstack/react-query';
+import { getAllUsers } from '@/utils/queries';
+import Loader from '@/components/Loader';
 
 export default function Users() {
-  // Parse user list
-  const userList = userListSchema.parse(users);
+  const {
+    data: usersData,
+    isLoading: usersLoading,
+    error: usersError,
+    isError: isUsersError,
+  } = useQuery({
+    queryKey: ['all-vehicles'],
+    queryFn: getAllUsers,
+  });
+
+  // console.log(usersData?.data?.[0].full_name);
 
   return (
     <UsersProvider>
@@ -38,7 +51,12 @@ export default function Users() {
           <UsersPrimaryButtons />
         </div>
         <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0">
-          <UsersTable data={userList} columns={columns} />
+          {usersData?.data ? (
+            <UsersTable data={usersData?.data} columns={columns} />
+          ) : (
+            // <Loader />
+            <p>Loading...</p>
+          )}
         </div>
       </Main>
 

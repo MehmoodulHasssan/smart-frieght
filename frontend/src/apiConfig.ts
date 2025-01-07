@@ -19,9 +19,11 @@ const API_ROUTES = {
   },
   ADMIN: {
     GET_ALL_ORDERS: API_DOMAIN + '/admin/get-all-orders',
+    GET_ALL_USERS: API_DOMAIN + '/admin/all-users',
+    GET_ALL_VEHICLES: API_DOMAIN + '/admin/all-vehicles',
   },
   PUBLIC: {
-    GET_ALL_VEHICLES: API_DOMAIN + '/all-vehicles',
+    GET_AVAILAIBLE_VEHICLES: API_DOMAIN + '/available-vehicles',
     GET_ALL_CITIES: API_DOMAIN + '/all-cities',
   },
 };

@@ -2,14 +2,17 @@
 import React, { useState } from 'react';
 import useDialogState from '@/hooks/use-dialog-state';
 import { User } from '../data/schema';
+import { IUserRes } from '@/utils/queries';
 
 type UsersDialogType = 'invite' | 'add' | 'edit' | 'delete';
 
 interface UsersContextType {
   open: UsersDialogType | null;
   setOpen: (str: UsersDialogType | null) => void;
-  currentRow: User | null;
-  setCurrentRow: React.Dispatch<React.SetStateAction<User | null>>;
+  currentRow: IUserRes['data'][number] | null;
+  setCurrentRow: React.Dispatch<
+    React.SetStateAction<IUserRes['data'][number] | null>
+  >;
 }
 
 const initialState: UsersContextType = {
@@ -27,7 +30,9 @@ interface Props {
 
 export default function UsersProvider({ children }: Props) {
   const [open, setOpen] = useDialogState<UsersDialogType>(null);
-  const [currentRow, setCurrentRow] = useState<User | null>(null);
+  const [currentRow, setCurrentRow] = useState<IUserRes['data'][number] | null>(
+    null
+  );
 
   return (
     <UsersContext.Provider value={{ open, setOpen, currentRow, setCurrentRow }}>

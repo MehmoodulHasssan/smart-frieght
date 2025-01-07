@@ -37,4 +37,15 @@ const safeDecode = (encodedString: string) => {
   }
 };
 
-export { attributeToLabel, limitString, safeDecode };
+//format timestamp
+const formatDate = (date: Date) => {
+  const newDate = new Date(date);
+  const formatted = newDate.toLocaleDateString('en-US', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+  return formatted;
+};
+
+export { attributeToLabel, limitString, safeDecode, formatDate };

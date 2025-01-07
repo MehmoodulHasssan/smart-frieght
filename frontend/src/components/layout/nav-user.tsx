@@ -24,6 +24,11 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
+import { logoutUser } from '@/utils/mutations/authMutations';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
+import { useAuthContext } from '@/context/authContext';
 
 export function NavUser({
   user,
@@ -35,6 +40,28 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
+  const router = useRouter();
+  const { toast } = useToast();
+  const { setCurrentUser } = useAuthContext();
+  const { mutate, isPending } = useMutation({
+    mutationKey: ['logoutUser'],
+    mutationFn: logoutUser,
+    onSuccess: () => {
+      toast({
+        title: 'Success',
+        description: 'Logged out successfully',
+      });
+      setCurrentUser(null);
+      router.replace('/auth/login');
+    },
+    onError: (error) => {
+      console.log(error);
+      toast({
+        title: 'Error',
+        description: 'Something went wrong',
+      });
+    },
+  });
 
   return (
     <SidebarMenu>
@@ -103,7 +130,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => mutate()}>
               <LogOut />
               Log out
             </DropdownMenuItem>

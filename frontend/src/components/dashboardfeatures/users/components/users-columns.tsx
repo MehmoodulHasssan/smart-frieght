@@ -4,11 +4,13 @@ import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import LongText from '@/components/long-text';
 import { callTypes, userTypes } from '../data/data';
-import { User } from '../data/schema';
+// import { User } from '../data/schema';
 import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
+import { IUserRes } from '@/utils/queries';
+import { formatDate } from '@/utils/helpers';
 
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<IUserRes['data'][number]>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -39,34 +41,38 @@ export const columns: ColumnDef<User>[] = [
     enableSorting: false,
     enableHiding: false,
   },
+  // {
+  //   accessorKey: 'username',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Username" />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <LongText className="max-w-36">{row.original.username}</LongText>
+  //   ),
+  //   meta: {
+  //     className: cn(
+  //       'drop-shadow-[0_1px_2px_rgb(0_0_0_/_0.1)] dark:drop-shadow-[0_1px_2px_rgb(255_255_255_/_0.1)] lg:drop-shadow-none',
+  //       'bg-background transition-colors duration-200 group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted',
+  //       'sticky left-6 md:table-cell'
+  //     ),
+  //   },
+  //   enableHiding: false,
+  // },
   {
-    accessorKey: 'username',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Username" />
-    ),
-    cell: ({ row }) => (
-      <LongText className="max-w-36">{row.getValue('username')}</LongText>
-    ),
-    meta: {
-      className: cn(
-        'drop-shadow-[0_1px_2px_rgb(0_0_0_/_0.1)] dark:drop-shadow-[0_1px_2px_rgb(255_255_255_/_0.1)] lg:drop-shadow-none',
-        'bg-background transition-colors duration-200 group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted',
-        'sticky left-6 md:table-cell'
-      ),
-    },
-    enableHiding: false,
-  },
-  {
-    id: 'fullName',
+    // id: 'full_name',
+    accessorKey: 'full_name',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => {
-      const { firstName, lastName } = row.original;
-      const fullName = `${firstName} ${lastName}`;
-      return <LongText className="max-w-36">{fullName}</LongText>;
+      // console.log(row.original);
+      // const { firstName, lastName } = row.original;
+      // const fullName = `${firstName} ${lastName}`;
+      console.log(row.getValue('full_name'));
+      return <LongText className="max-w-36">{row.original.full_name}</LongText>;
     },
     meta: { className: 'w-36' },
+    enableSorting: true,
   },
   {
     accessorKey: 'email',
@@ -78,35 +84,50 @@ export const columns: ColumnDef<User>[] = [
     ),
   },
   {
-    accessorKey: 'phoneNumber',
+    accessorKey: 'phone_number',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Phone Number" />
     ),
-    cell: ({ row }) => <div>{row.getValue('phoneNumber')}</div>,
+    cell: ({ row }) => <div>{row.getValue('phone_number')}</div>,
     enableSorting: false,
   },
   {
-    accessorKey: 'status',
+    accessorKey: 'createdAt',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
+      <DataTableColumnHeader column={column} title="Registration Date" />
     ),
     cell: ({ row }) => {
-      const { status } = row.original;
-      const badgeColor = callTypes.get(status);
       return (
-        <div className="flex space-x-2">
-          <Badge variant="outline" className={cn('capitalize', badgeColor)}>
-            {row.getValue('status')}
-          </Badge>
-        </div>
+        <LongText className="max-w-36">
+          {formatDate(row.original.createdAt)}
+        </LongText>
       );
     },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
-    enableHiding: false,
+    meta: { className: 'w-36' },
     enableSorting: false,
   },
+  // {
+  //   accessorKey: 'status',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Status" />
+  //   ),
+  //   cell: ({ row }) => {
+  //     const { status } = row.original;
+  //     const badgeColor = callTypes.get(status);
+  //     return (
+  //       <div className="flex space-x-2">
+  //         <Badge variant="outline" className={cn('capitalize', badgeColor)}>
+  //           {row.getValue('status')}
+  //         </Badge>
+  //       </div>
+  //     );
+  //   },
+  //   filterFn: (row, id, value) => {
+  //     return value.includes(row.getValue(id));
+  //   },
+  //   enableHiding: false,
+  //   enableSorting: false,
+  // },
   {
     accessorKey: 'role',
     header: ({ column }) => (

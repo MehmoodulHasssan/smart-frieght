@@ -16,14 +16,18 @@ const getAddress = async (address: string): Promise<OSMPlaceResponse> => {
 };
 
 const getAllVehicles = async (): Promise<IVehicleRes> => {
-  return await apiCall(API_ROUTES.PUBLIC.GET_ALL_VEHICLES, 'GET');
+  return await apiCall(API_ROUTES.ADMIN.GET_ALL_VEHICLES, 'GET');
 };
 
 const getConsignorOrders = async () => {
   return await apiCall(API_ROUTES.CONSIGNOR.GET_ALL_ORDERS, 'GET');
 };
 
-export { getAddress, getAllVehicles, getConsignorOrders };
+const getAllUsers = async (): Promise<IUserRes> => {
+  return await apiCall(API_ROUTES.ADMIN.GET_ALL_USERS, 'GET');
+};
+
+export { getAddress, getAllVehicles, getConsignorOrders, getAllUsers };
 
 export interface OSMPlace {
   place_id: number;
@@ -56,4 +60,18 @@ interface IVehicle {
   status: 'AVAILABLE' | 'UNAVAILABLE'; // Status with specific allowed values
   avg_fuel_consumption: number; // Average fuel consumption (e.g., liters per 100 km or km per liter)
   notes: string; // Additional notes about the vehicle}
+}
+
+export interface IUserRes extends ApiResponse {
+  data: IUser[];
+}
+
+interface IUser {
+  _id: string;
+  email: string;
+  role: 'driver' | 'admin' | 'customer'; // adjust roles as necessary
+  full_name: string;
+  phone_number: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

@@ -9,6 +9,7 @@ import { NextFunction } from 'migrate';
 import { error } from 'console';
 import publicRouter from './routes/public.router';
 import consignorRouter from './routes/consignor.router';
+import adminRouter from './routes/admin.router';
 
 const port: number = process.env.PORT as unknown as number;
 
@@ -35,6 +36,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRouter);
 app.use('/api/consignor', consignorRouter);
 app.use('/api', publicRouter);
+app.use('/api/admin', adminRouter);
 
 //error handler
 app.use(

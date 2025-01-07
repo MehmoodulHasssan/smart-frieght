@@ -4,19 +4,19 @@ import { validationResult } from 'express-validator';
 import { User, UserRole } from '../models/User';
 import { DriverStatus, Driver } from '../models/Driver';
 import ApiResponse from '../utils/ApiResponse';
-import { comparePassword, generateToken } from '../utils/authUtils';
-import { Types } from 'mongoose';
-import { Order } from '../models/Order';
-import { Vehicle, VehicleStatus } from '../models/Vehicle';
-import { City } from '../models/City';
+import { Vehicle } from '../models/Vehicle';
 
-const getAvailableVehiclesController = async (
+export const getAllVehiclesController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const vehicles = await Vehicle.find({ status: VehicleStatus.AVAILABLE });
+    const user = req.body._user;
+    if (user.role !== UserRole.ADMIN) {
+      return next(ApiError.unauthorized('User not authorized'));
+    }
+    const vehicles = await Vehicle.find({});
     if (!vehicles || vehicles.length == 0) {
       return next(ApiError.notFound('No vehicles found'));
     }
@@ -31,19 +31,22 @@ const getAvailableVehiclesController = async (
   }
 };
 
-const getAllCities = async (
+export const getAllUsersController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const cities = await City.find({});
-    if (!cities || cities.length == 0) {
-      return next(ApiError.notFound('No cities found'));
+    const user = req.body._user;
+    if (user.role !== UserRole.ADMIN) {
+      return next(ApiError.unauthorized('User not authorized'));
     }
-    return new ApiResponse(200, cities, 'Cities fetched successfully').send(
-      res
-    );
+
+    const users = await User.find({}, { password: 0 });
+    if (!users || users.length == 0) {
+      return next(ApiError.notFound('No users found'));
+    }
+    return new ApiResponse(200, users, 'Users fetched successfully').send(res);
   } catch (error) {
     if (error instanceof ApiError) {
       return next(error);
@@ -51,4 +54,3 @@ const getAllCities = async (
     return next(ApiError.internal('Something went wrong'));
   }
 };
-export { getAllCities, getAvailableVehiclesController };
