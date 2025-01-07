@@ -10,14 +10,37 @@ import { Order } from '../models/Order';
 import { Vehicle, VehicleStatus } from '../models/Vehicle';
 import { City } from '../models/City';
 
+const getAvailableVehiclesController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const vehicles = await Vehicle.find({ status: VehicleStatus.AVAILABLE });
+    if (!vehicles || vehicles.length == 0) {
+      return next(ApiError.notFound('No vehicles found'));
+    }
+    return new ApiResponse(200, vehicles, 'Vehicles fetched successfully').send(
+      res
+    );
+  } catch (error) {
+    if (error instanceof ApiError) {
+      return next(error);
+    }
+    return next(ApiError.internal('Something went wrong'));
+  }
+};
 const getAllVehiclesController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    console.log('reached');
-    const vehicles = await Vehicle.find({ status: VehicleStatus.AVAILABLE });
+    const user = req.body._user;
+    if (user.role !== UserRole.ADMIN) {
+      return next(ApiError.unauthorized('User not authorized'));
+    }
+    const vehicles = await Vehicle.find({});
     if (!vehicles || vehicles.length == 0) {
       return next(ApiError.notFound('No vehicles found'));
     }
@@ -52,4 +75,8 @@ const getAllCities = async (
     return next(ApiError.internal('Something went wrong'));
   }
 };
-export { getAllVehiclesController, getAllCities };
+export {
+  getAllVehiclesController,
+  getAllCities,
+  getAvailableVehiclesController,
+};
