@@ -15,15 +15,11 @@ const userRegistrationSchema = z
   .object({
     full_name: z.string().min(1, { message: 'Full Name is required.' }),
     email: z.string().min(1, { message: 'Email is required.' }).email(),
-    licence_no: z
-      .string()
-      .min(0)
-      .transform((lic) => lic.trim()),
+    licence_no: z.string().optional(),
+    // .min(0)
+    // .transform((lic) => lic.trim()),
     phone_number: z.string().min(1, { message: 'Phone number is required.' }),
-    password: z
-      .string()
-      .min(8)
-      .transform((pwd) => pwd.trim()),
+    password: z.string().transform((pwd) => pwd.trim()),
     confirm_password: z.string().transform((pwd) => pwd.trim()),
     isEdit: z.boolean(),
     role: z.string().min(1, { message: 'Role is required.' }),

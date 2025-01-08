@@ -10,6 +10,7 @@ enum UserRole {
 
 // Define the user interface that extends Document
 interface IUser extends Document {
+  driver: mongoose.Types.ObjectId;
   full_name: string;
   email: string;
   phone_number: string;
@@ -49,13 +50,16 @@ const userSchema: Schema<IUser> = new Schema(
       default: UserRole.CONSIGNOR,
       //default role has been set to consignor as of most use cases
     },
+    driver: {
+      type: Schema.Types.ObjectId,
+      ref: 'Driver',
+      required: false,
+    },
   },
   {
     timestamps: true,
   }
 );
-
-// Create the user model
 
 // create a pre function to hash the password before saving it to the database
 userSchema.pre('save', function (next) {
@@ -73,6 +77,10 @@ userSchema.pre('save', function (next) {
       next(error);
     });
 });
+
+// userSchema.post('save', async function (error, doc, next) {
+
+// })
 
 const User = mongoose.model<IUser>('User', userSchema);
 export { UserRole, User, IUser };

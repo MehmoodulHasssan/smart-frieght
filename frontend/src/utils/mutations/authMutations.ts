@@ -5,14 +5,7 @@ const loginUser = async (data: { email: string; password: string }) => {
   return await apiCall(API_ROUTES.AUTH.LOGIN, 'POST', data);
 };
 
-const registerUser = async (data: {
-  email: string;
-  password: string;
-  full_name: string;
-  licence_no?: string;
-  phone_number: string;
-  role: string;
-}) => {
+const registerUser = async (data: IUserReq) => {
   return await apiCall(API_ROUTES.AUTH.REGISTER_USER, 'POST', data);
 };
 
@@ -43,4 +36,15 @@ interface IUserResponse extends ApiResponse {
     full_name: string;
     phone_number: string;
   };
+}
+
+export interface IUserReq {
+  _id?: string;
+  email: string;
+  password: string;
+  confirm_password: string;
+  full_name: string;
+  licence_no?: string;
+  phone_number: string;
+  role: string;
 }

@@ -7,7 +7,7 @@ const loginValidation = [
   body('password').isString().withMessage('Password is required'),
 ];
 
-const registerValidation = [
+const commonUserValidation = [
   body('full_name').isString().withMessage('Full name is required'),
   body('email').isEmail().withMessage('Email is required'),
   body('phone_number').isString().withMessage('Phone number is required'),
@@ -22,6 +22,24 @@ const registerValidation = [
   body('role')
     .isIn([UserRole.CONSIGNOR, UserRole.DRIVER])
     .withMessage('Role is required'),
+];
+const updateUserValidation = [
+  ...commonUserValidation,
+  body('password').custom((value) => {
+    if (value && value.length < 8) {
+      throw new Error('Password must be at least 8 characters long');
+    }
+    return true;
+  }),
+  body('confirm_password').custom((value, { req }) => {
+    if (value && value !== req.body.password) {
+      throw new Error('Passwords do not match');
+    }
+    return true;
+  }),
+];
+const registerValidation = [
+  ...commonUserValidation,
   body('password').isLength({ min: 8 }).withMessage('Password is required'),
   body('confirm_password')
     .equals('password')
@@ -126,4 +144,19 @@ const newOrderValidation = [
   body('vehicle_id').isString().withMessage('Valid Vehicle id is required'),
 ];
 
-export { loginValidation, registerValidation, newOrderValidation };
+const vehicleValidation = [
+  body('license_plate').isString().withMessage('License plate is required'),
+  body('vehicle_model').isString().withMessage('Vehicle model is required'),
+  body('capacity').isString().withMessage('Capacity is required'),
+  body('avg_fuel_consumption')
+    .isString()
+    .withMessage('Avg fuel consumption is required'),
+];
+
+export {
+  loginValidation,
+  registerValidation,
+  newOrderValidation,
+  updateUserValidation,
+  vehicleValidation,
+};

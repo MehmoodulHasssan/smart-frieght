@@ -2,12 +2,14 @@
 
 import { useState } from 'react';
 import { IconAlertTriangle } from '@tabler/icons-react';
-import { toast } from '@/hooks/use-toast';
+import { toast, useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ConfirmDialog } from '@/components/confirm-dialog';
 import { IUserRes } from '@/utils/queries';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteUser } from '@/utils/mutations/adminMutations';
 // import { User } from '../data/schema'
 
 interface Props {
@@ -18,21 +20,31 @@ interface Props {
 
 export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
   const [value, setValue] = useState('');
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationKey: ['delete-user'],
+    mutationFn: deleteUser,
+    onSuccess: () => {
+      toast({
+        title: 'Success',
+        description: 'The user has been deleted successfully',
+      });
+      queryClient.invalidateQueries({ queryKey: ['all-users'] });
+      queryClient.refetchQueries({ queryKey: ['all-users'] });
+      onOpenChange(false);
+    },
+    onError: (error) => {
+      toast({
+        title: 'Error',
+        description: error.message,
+      });
+    },
+  });
 
   const handleDelete = () => {
     if (value.trim() !== currentRow.email) return;
-
-    onOpenChange(false);
-    toast({
-      title: 'The following user has been deleted:',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">
-            {JSON.stringify(currentRow, null, 2)}
-          </code>
-        </pre>
-      ),
-    });
+    mutate(currentRow._id);
   };
 
   return (
@@ -64,11 +76,11 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
           </p>
 
           <Label className="my-2">
-            Username:
+            Email:
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder="Enter username to confirm deletion."
+              placeholder="Enter email to confirm deletion."
             />
           </Label>
 
@@ -80,7 +92,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
           </Alert>
         </div>
       }
-      confirmText="Delete"
+      confirmText={isPending ? 'Deleting...' : 'Delete'}
       destructive
     />
   );

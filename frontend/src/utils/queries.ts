@@ -59,7 +59,7 @@ interface IVehicle {
   capacity: number; // Capacity of the vehicle in kilograms or other unit
   status: 'AVAILABLE' | 'UNAVAILABLE'; // Status with specific allowed values
   avg_fuel_consumption: number; // Average fuel consumption (e.g., liters per 100 km or km per liter)
-  notes: string; // Additional notes about the vehicle}
+  notes?: string; // Additional notes about the vehicle}
 }
 
 export interface IUserRes extends ApiResponse {
@@ -71,7 +71,14 @@ interface IUser {
   email: string;
   role: 'driver' | 'admin' | 'consignor'; // adjust roles as necessary
   full_name: string;
+  driver?: IDriver;
   phone_number: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+interface IDriver {
+  _id: string;
+  licence_no: string;
+  status: 'AVAILABLE' | 'UNAVAILABLE';
 }

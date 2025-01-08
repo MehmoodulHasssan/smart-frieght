@@ -25,7 +25,7 @@ export default function Users() {
     error: usersError,
     isError: isUsersError,
   } = useQuery({
-    queryKey: ['all-vehicles'],
+    queryKey: ['all-users'],
     queryFn: getAllUsers,
   });
 
@@ -52,14 +52,36 @@ export default function Users() {
           <UsersPrimaryButtons />
         </div>
         <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0">
-          {
-            <UsersTable
-              data={usersData?.data || []}
-              isLoading={usersLoading}
-              error={usersError as ApiError | null}
-              columns={columns}
-            />
-          }
+          {(() => {
+            const tablesData = [];
+            if (usersData?.data) {
+              for (const user of usersData?.data) {
+                if (user.driver) {
+                  const { driver, ...rest } = user;
+                  tablesData.push({
+                    licence_no: driver.licence_no,
+                    ...rest,
+                  });
+                } else {
+                  tablesData.push(user);
+                }
+              }
+            }
+            return (
+              <UsersTable
+                data={tablesData}
+                isLoading={usersLoading}
+                error={usersError as ApiError | null}
+                columns={columns}
+              />
+            );
+          })()}
+          {/* <UsersTable
+            data={usersData?.data || []}
+            columns={columns}
+            isLoading={usersLoading}
+            error={usersError as ApiError | null}
+          /> */}
           {/* {usersLoading && <Loader />} */}
         </div>
       </Main>

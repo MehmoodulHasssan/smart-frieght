@@ -29,6 +29,10 @@ import { userTypes } from '../data/data';
 import { User } from '../data/schema';
 import { IUserRes } from '@/utils/queries';
 import { userRegistrationSchema } from '@/utils/validationSchemas';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createNewUser, updateUser } from '@/utils/mutations/adminMutations';
+import { ApiResponse } from '@/utils/apiCall';
+import { useEffect } from 'react';
 
 const formSchema = z.object({
   firstName: z.string().min(1, { message: 'First Name is required.' }),
@@ -95,16 +99,39 @@ interface Props {
   onOpenChange: (open: boolean) => void;
 }
 
-export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
-  const isEdit = !!currentRow;
-  // const isDriver = currentRow?.role === 'driver';
+let firstRender = true;
 
+export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
+  // const isDriver = currentRow?.role === 'driver';
+  const isEdit = !!currentRow;
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationKey: ['update-create-user'],
+    mutationFn: isEdit ? updateUser : createNewUser,
+    onSuccess: (data: ApiResponse) => {
+      toast({
+        title: 'Success',
+        description: data?.message,
+      });
+      queryClient.invalidateQueries({ queryKey: ['all-users'] });
+      queryClient.refetchQueries({ queryKey: ['all-users'] });
+      onOpenChange(false);
+    },
+    onError: (error) => {
+      toast({
+        title: 'Error',
+        description: error?.message,
+      });
+    },
+  });
+
+  // console.log(currentRow);
   const form = useForm<z.infer<typeof userRegistrationSchema>>({
     resolver: zodResolver(userRegistrationSchema),
     defaultValues: isEdit
       ? {
           ...currentRow,
-          licence_no: '',
+          // licence_no: '',
           password: '',
           confirm_password: '',
           isEdit,
@@ -119,21 +146,29 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
           isEdit,
         },
   });
-  console.log(form.control._formState.errors);
+
   const onSubmit = (values: z.infer<typeof userRegistrationSchema>) => {
-    form.reset();
-    toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      ),
+    console.log(values);
+    mutate({
+      _id: currentRow?._id,
+      ...values,
     });
-    onOpenChange(false);
   };
 
+  // console.log(currentRow);
+
   const isPasswordTouched = !!form.formState.dirtyFields.password;
+
+  useEffect(() => {
+    if (firstRender) {
+      firstRender = false;
+      return;
+    }
+    if (form.watch('role') === 'driver') {
+      //@ts-ignore
+      form.setValue('licence_no', currentRow?.licence_no || ''); // Set the default value to empty if role is 'driver'
+    }
+  }, [form.watch('role')]); // Dependency on role
 
   return (
     <Dialog
@@ -303,8 +338,8 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
           </Form>
         </ScrollArea>
         <DialogFooter>
-          <Button type="submit" form="user-form">
-            Save changes
+          <Button type="submit" form="user-form" disabled={isPending}>
+            {isPending ? 'Saving...' : 'Save changes'}
           </Button>
         </DialogFooter>
       </DialogContent>

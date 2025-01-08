@@ -132,6 +132,25 @@ const userRegisterController = async (
     if (isUser) {
       return next(ApiError.badRequest('This email is already registerd'));
     }
+
+    //handle creation of driver
+    let newDriver;
+
+    if (licence_no) {
+      const isDriver = await Driver.findOne({ licence_no });
+      if (isDriver) {
+        return next(ApiError.badRequest('This driver is already registerd'));
+      }
+      newDriver = await Driver.create({
+        licence_no,
+        status: DriverStatus.UNAVAILABLE,
+      });
+      if (!newDriver) {
+        return next(
+          ApiError.internal('Failed to create driver.Please try again')
+        );
+      }
+    }
     const newUser = await User.create({
       full_name,
       email,
@@ -149,12 +168,6 @@ const userRegisterController = async (
         res
       );
     }
-
-    const newDriver = await Driver.create({
-      licence_no,
-      user_id: newUser._id,
-      status: DriverStatus.UNAVAILABLE,
-    });
 
     if (!newDriver) {
       await User.findByIdAndDelete(newUser._id);

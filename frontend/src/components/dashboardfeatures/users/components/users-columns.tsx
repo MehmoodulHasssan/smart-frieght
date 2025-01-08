@@ -68,7 +68,7 @@ export const columns: ColumnDef<IUserRes['data'][number]>[] = [
       // console.log(row.original);
       // const { firstName, lastName } = row.original;
       // const fullName = `${firstName} ${lastName}`;
-      console.log(row.getValue('full_name'));
+      // console.log(row.getValue('full_name'));
       return <LongText className="max-w-36">{row.original.full_name}</LongText>;
     },
     meta: { className: 'w-36' },
