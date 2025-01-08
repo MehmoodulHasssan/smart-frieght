@@ -2,13 +2,16 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { consignorRegisterSchema } from '@/utils/validationSchemas';
+import {
+  consignorRegisterSchema,
+  userRegistrationSchema,
+} from '@/utils/validationSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import CustomFormField from '@/components/CustomFormField';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
-import { registerConsignor } from '@/utils/mutations/authMutations';
+import { registerUser } from '@/utils/mutations/authMutations';
 import { useToast } from '@/hooks/use-toast';
 import { ApiError } from '@/utils/apiCall';
 
@@ -16,9 +19,10 @@ const ConsignorRegister = () => {
   const { toast } = useToast();
   const { mutate, isPending } = useMutation({
     mutationKey: ['login'],
-    mutationFn: registerConsignor,
+    mutationFn: registerUser,
     onSuccess: (data) => {
       console.log(data);
+      form.reset();
       toast({
         title: 'Success',
         description: data?.message,
@@ -33,18 +37,20 @@ const ConsignorRegister = () => {
     },
   });
   const router = useRouter();
-  const form = useForm<z.infer<typeof consignorRegisterSchema>>({
+  const form = useForm<z.infer<typeof userRegistrationSchema>>({
     mode: 'onChange',
-    resolver: zodResolver(consignorRegisterSchema),
+    resolver: zodResolver(userRegistrationSchema),
     defaultValues: {
       full_name: '',
       phone_number: '',
       email: '',
       password: '',
+      confirm_password: '',
+      role: 'consignor',
     },
   });
 
-  function onSubmit(values: z.infer<typeof consignorRegisterSchema>) {
+  function onSubmit(values: z.infer<typeof userRegistrationSchema>) {
     console.log(values);
     mutate(values);
   }
@@ -81,6 +87,12 @@ const ConsignorRegister = () => {
               name="password"
               label="Password"
               placeholder="Enter your password"
+            />
+            <CustomFormField
+              control={form.control}
+              name="confirm_password"
+              label="Confirm Password"
+              placeholder="Confirm your password"
             />
             <div className="flex space-x-2 text-sm">
               <p>Don&apos;t have an account? </p>

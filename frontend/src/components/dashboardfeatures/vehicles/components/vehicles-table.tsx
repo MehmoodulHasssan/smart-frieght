@@ -26,6 +26,8 @@ import {
 import { DataTablePagination } from './data-table-pagination';
 import { DataTableToolbar } from './data-table-toolbar';
 import { IVehicleRes } from '@/utils/queries';
+import { ApiError } from '@/utils/apiCall';
+import Loader from '@/components/Loader';
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -37,9 +39,16 @@ declare module '@tanstack/react-table' {
 interface DataTableProps {
   columns: ColumnDef<IVehicleRes['data'][number]>[];
   data: IVehicleRes['data'];
+  isLoading: boolean;
+  error: ApiError | null;
 }
 
-export function VehiclesTable({ columns, data }: DataTableProps) {
+export function VehiclesTable({
+  columns,
+  data,
+  error,
+  isLoading,
+}: DataTableProps) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -67,6 +76,7 @@ export function VehiclesTable({ columns, data }: DataTableProps) {
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
+  // console.log(isLoading);
   return (
     <div className="space-y-4">
       <DataTableToolbar table={table} />
@@ -121,7 +131,13 @@ export function VehiclesTable({ columns, data }: DataTableProps) {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {isLoading ? (
+                    <Loader />
+                  ) : error ? (
+                    error.message
+                  ) : (
+                    'No results.'
+                  )}
                 </TableCell>
               </TableRow>
             )}

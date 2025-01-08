@@ -1,5 +1,5 @@
 'use client';
-import { useTheme } from '@/context/myThemeContext';
+import { useTheme } from '@/context/theme-context';
 import React from 'react';
 
 const Hero = () => {

@@ -97,9 +97,7 @@ export const columns: ColumnDef<IVehicleRes['data'][number]>[] = [
     ),
     cell: ({ row }) => {
       const { status } = row.original;
-      const badgeColor = callTypes.get(
-        status.toLowerCase() as unknown as 'available' | 'unavailable'
-      );
+      const badgeColor = callTypes.get(status);
       return (
         <div className="flex space-x-2">
           <Badge variant="outline" className={cn('capitalize', badgeColor)}>

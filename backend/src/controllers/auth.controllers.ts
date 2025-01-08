@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import ApiError from '../utils/ApiError';
-import { validationResult } from 'express-validator';
+import { ExpressValidator, validationResult } from 'express-validator';
 import { User, UserRole } from '../models/User';
 import { DriverStatus, Driver } from '../models/Driver';
 import ApiResponse from '../utils/ApiResponse';
 import { comparePassword, generateToken } from '../utils/authUtils';
 import { Types } from 'mongoose';
+import { registerValidation } from '../utils/validations';
 
 const loginController = async (
   req: Request,
@@ -56,55 +57,56 @@ const loginController = async (
   }
 };
 
-const consignorRegisterController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return next(
-        ApiError.badRequest('Please enter valid credentials', errors.array())
-      );
-    }
-    const { full_name, email, phone_number, password } = req.body;
+// const consignorRegisterController = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return next(
+//         ApiError.badRequest('Please enter valid credentials', errors.array())
+//       );
+//     }
+//     const { full_name, email, phone_number, password } = req.body;
 
-    const user = await User.findOne().where('email').equals(email);
+//     const user = await User.findOne().where('email').equals(email);
 
-    if (user) {
-      return next(ApiError.badRequest('This email is already registerd'));
-    }
-    const consignor = await User.create({
-      full_name,
-      email,
-      password,
-      phone_number,
-      role: UserRole.CONSIGNOR,
-    });
+//     if (user) {
+//       return next(ApiError.badRequest('This email is already registerd'));
+//     }
+//     const consignor = await User.create({
+//       full_name,
+//       email,
+//       password,
+//       phone_number,
+//       role: UserRole.CONSIGNOR,
+//     });
 
-    if (!consignor) {
-      return next(ApiError.internal('Failed to create user.Please try again'));
-    }
-    const userResponse = {
-      id: consignor._id,
-      full_name: consignor.full_name,
-      email: consignor.email,
-      phone_number: consignor.phone_number,
-      role: consignor.role,
-    };
+//     if (!consignor) {
+//       return next(ApiError.internal('Failed to create user.Please try again'));
+//     }
+//     const userResponse = {
+//       id: consignor._id,
+//       full_name: consignor.full_name,
+//       email: consignor.email,
+//       phone_number: consignor.phone_number,
+//       role: consignor.role,
+//     };
 
-    return new ApiResponse(200, userResponse, 'User created successfully').send(
-      res
-    );
-  } catch (error) {
-    if (error instanceof ApiError) {
-      return next(error);
-    }
-    return next(ApiError.internal('Internal Server Error'));
-  }
-};
-const driverRegisterController = async (
+//     return new ApiResponse(200, userResponse, 'User created successfully').send(
+//       res
+//     );
+//   } catch (error) {
+//     if (error instanceof ApiError) {
+//       return next(error);
+//     }
+//     return next(ApiError.internal('Internal Server Error'));
+//   }
+// };
+
+const userRegisterController = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -117,7 +119,14 @@ const driverRegisterController = async (
         errors.array()
       );
     }
-    const { full_name, email, phone_number, password, licence_no } = req.body;
+    const {
+      full_name,
+      email,
+      phone_number,
+      password,
+      licence_no,
+      role,
+    }: IUserReq = req.body;
     // console.log(req.body);
     const isUser = await User.findOne({ email });
     if (isUser) {
@@ -128,11 +137,17 @@ const driverRegisterController = async (
       email,
       password,
       phone_number,
-      role: UserRole.DRIVER,
+      role,
     });
 
     if (!newUser) {
       return next(ApiError.internal('Failed to create user.Please try again'));
+    }
+
+    if (newUser.role !== UserRole.DRIVER) {
+      return new ApiResponse(200, undefined, 'User created successfully').send(
+        res
+      );
     }
 
     const newDriver = await Driver.create({
@@ -212,8 +227,17 @@ const verifyUserController = async (
 
 export {
   loginController,
-  consignorRegisterController,
-  driverRegisterController,
+  // consignorRegisterController,
+  userRegisterController,
   logoutController,
   verifyUserController,
 };
+
+export interface IUserReq {
+  full_name: string;
+  email: string;
+  phone_number: string;
+  password: string;
+  licence_no?: string;
+  role: string;
+}

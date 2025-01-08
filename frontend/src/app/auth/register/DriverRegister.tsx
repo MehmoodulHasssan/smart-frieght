@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { driverRegisterSchema } from '@/utils/validationSchemas';
+import { userRegistrationSchema } from '@/utils/validationSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import CustomFormField from '@/components/CustomFormField';
@@ -10,14 +10,14 @@ import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
 import { ApiError } from '@/utils/apiCall';
-import { registerDriver } from '@/utils/mutations/authMutations';
+import { registerUser } from '@/utils/mutations/authMutations';
 
 const DriverRegister = () => {
   const router = useRouter();
   const { toast } = useToast();
   const { mutate, isPending } = useMutation({
     mutationKey: ['login'],
-    mutationFn: registerDriver,
+    mutationFn: registerUser,
     onSuccess: (data) => {
       console.log(data);
       toast({
@@ -33,19 +33,21 @@ const DriverRegister = () => {
       });
     },
   });
-  const form = useForm<z.infer<typeof driverRegisterSchema>>({
+  const form = useForm<z.infer<typeof userRegistrationSchema>>({
     mode: 'onChange',
-    resolver: zodResolver(driverRegisterSchema),
+    resolver: zodResolver(userRegistrationSchema),
     defaultValues: {
       full_name: '',
       phone_number: '',
       licence_no: '',
       email: '',
       password: '',
+      confirm_password: '',
+      role: 'driver',
     },
   });
 
-  function onSubmit(values: z.infer<typeof driverRegisterSchema>) {
+  function onSubmit(values: z.infer<typeof userRegistrationSchema>) {
     console.log(values);
     mutate(values);
   }
@@ -88,6 +90,12 @@ const DriverRegister = () => {
               name="password"
               label="Password"
               placeholder="Enter your password"
+            />
+            <CustomFormField
+              control={form.control}
+              name="confirm_password"
+              label="Confirm Password"
+              placeholder="Confirm your password"
             />
             <div className="flex space-x-2 text-sm">
               <p>Don&apos;t have an account? </p>

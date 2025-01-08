@@ -65,11 +65,7 @@ const Header = () => {
       </div>
 
       {/* Middle: Navigation options */}
-      <div
-        className={`hidden lg:flex space-x-6 ${
-          theme == 'dark' ? 'text-white' : 'text-black'
-        }`}
-      >
+      <div className={`hidden lg:flex space-x-6`}>
         {navData.map((navItem) => (
           <NavLink
             key={navItem.title}

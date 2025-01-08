@@ -4,8 +4,8 @@ const MAP_API_DOMAIN = 'https://nominatim.openstreetmap.org';
 const API_ROUTES = {
   AUTH: {
     LOGIN: API_DOMAIN + '/auth/login',
-    REGISTER_CONSIGNOR: API_DOMAIN + '/auth/register/consignor',
-    REGISTER_DRIVER: API_DOMAIN + '/auth/register/driver',
+    // REGISTER_CONSIGNOR: API_DOMAIN + '/auth/register/consignor',
+    REGISTER_USER: API_DOMAIN + '/auth/register',
     LOGOUT: API_DOMAIN + '/auth/logout',
     VERIFY: API_DOMAIN + '/auth/verify',
   },

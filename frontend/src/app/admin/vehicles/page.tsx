@@ -15,6 +15,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getAllVehicles } from '@/utils/queries';
 import { VehiclesTable } from '@/components/dashboardfeatures/vehicles/components/vehicles-table';
 import { columns } from '@/components/dashboardfeatures/vehicles/components/vehicles-columns';
+import { ApiError } from '@/utils/apiCall';
 
 export default function Users() {
   const {
@@ -27,7 +28,7 @@ export default function Users() {
     queryFn: getAllVehicles,
   });
 
-  console.log(vehiclesData);
+  // console.log(vehiclesData);
   return (
     <UsersProvider>
       <Header fixed>
@@ -49,11 +50,12 @@ export default function Users() {
           <VehiclesPrimaryButtons />
         </div>
         <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0">
-          {vehiclesData?.data ? (
-            <VehiclesTable data={vehiclesData?.data} columns={columns} />
-          ) : (
-            <p>Loading...</p>
-          )}
+          <VehiclesTable
+            data={vehiclesData?.data || []}
+            columns={columns}
+            isLoading={vehiclesLoading}
+            error={vehiclesError as ApiError | null}
+          />
         </div>
       </Main>
 

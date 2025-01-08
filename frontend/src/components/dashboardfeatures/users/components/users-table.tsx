@@ -26,6 +26,8 @@ import { User } from '../data/schema';
 import { DataTablePagination } from './data-table-pagination';
 import { DataTableToolbar } from './data-table-toolbar';
 import { IUserRes } from '@/utils/queries';
+import { ApiError } from '@/utils/apiCall';
+import Loader from '@/components/Loader';
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -37,9 +39,16 @@ declare module '@tanstack/react-table' {
 interface DataTableProps {
   columns: ColumnDef<IUserRes['data'][number]>[];
   data: IUserRes['data'];
+  isLoading: boolean;
+  error: ApiError | null;
 }
 
-export function UsersTable({ columns, data }: DataTableProps) {
+export function UsersTable({
+  columns,
+  data,
+  error,
+  isLoading,
+}: DataTableProps) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -121,7 +130,13 @@ export function UsersTable({ columns, data }: DataTableProps) {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {isLoading ? (
+                    <Loader />
+                  ) : error ? (
+                    error.message
+                  ) : (
+                    'No results.'
+                  )}
                 </TableCell>
               </TableRow>
             )}

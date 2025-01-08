@@ -16,6 +16,7 @@ import { useAuthContext } from '@/context/authContext';
 import { useQuery } from '@tanstack/react-query';
 import { getAllUsers } from '@/utils/queries';
 import Loader from '@/components/Loader';
+import { ApiError } from '@/utils/apiCall';
 
 export default function Users() {
   const {
@@ -51,12 +52,15 @@ export default function Users() {
           <UsersPrimaryButtons />
         </div>
         <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0">
-          {usersData?.data ? (
-            <UsersTable data={usersData?.data} columns={columns} />
-          ) : (
-            // <Loader />
-            <p>Loading...</p>
-          )}
+          {
+            <UsersTable
+              data={usersData?.data || []}
+              isLoading={usersLoading}
+              error={usersError as ApiError | null}
+              columns={columns}
+            />
+          }
+          {/* {usersLoading && <Loader />} */}
         </div>
       </Main>
 

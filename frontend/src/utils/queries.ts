@@ -69,7 +69,7 @@ export interface IUserRes extends ApiResponse {
 interface IUser {
   _id: string;
   email: string;
-  role: 'driver' | 'admin' | 'customer'; // adjust roles as necessary
+  role: 'driver' | 'admin' | 'consignor'; // adjust roles as necessary
   full_name: string;
   phone_number: string;
   createdAt: Date;

@@ -1,31 +1,22 @@
 import express from 'express';
 import {
   loginController,
-  driverRegisterController,
   logoutController,
-  consignorRegisterController,
   verifyUserController,
+  userRegisterController,
 } from '../controllers/auth.controllers';
-import {
-  consignorRegisterValidation,
-  driverRegisterValidation,
-  loginValidation,
-} from '../utils/validations';
+import { registerValidation, loginValidation } from '../utils/validations';
 import { authenticateUser } from '../middlewares/authenticate.user';
 const authRouter = express.Router();
 
 authRouter.post('/login', loginValidation, loginController);
 
-authRouter.post(
-  '/register/consignor',
-  consignorRegisterValidation,
-  consignorRegisterController
-);
-authRouter.post(
-  '/register/driver',
-  driverRegisterValidation,
-  driverRegisterController
-);
+// authRouter.post(
+//   '/register/consignor',
+//   consignorRegisterValidation,
+//   consignorRegisterController
+// );
+authRouter.post('/register', registerValidation, userRegisterController);
 
 authRouter.post('/verify', authenticateUser, verifyUserController);
 
