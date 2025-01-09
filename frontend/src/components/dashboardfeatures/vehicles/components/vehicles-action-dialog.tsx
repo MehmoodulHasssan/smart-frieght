@@ -105,9 +105,9 @@ export function VehiclesActionDialog({
   onOpenChange,
 }: Props) {
   const { toast } = useToast();
-  const { invalidateQueries, refetchQueries } = useQueryClient();
+  const queryClient = useQueryClient();
   const isEdit = !!currentRow;
-  const { mutate, isPending } = useMutation({
+  const { mutate, isPending, error, isError } = useMutation({
     mutationKey: ['create-update-vehicle'],
     mutationFn: isEdit ? updateCar : createNewCar,
     onSuccess: (data: ApiResponse) => {
@@ -115,8 +115,8 @@ export function VehiclesActionDialog({
         title: 'Success',
         description: data?.message,
       });
-      invalidateQueries({ queryKey: ['all-vehicles'] });
-      refetchQueries({ queryKey: ['all-vehicles'] });
+      // queryClient.invalidateQueries({ queryKey: ['all-vehicles'] });
+      queryClient.refetchQueries({ queryKey: ['all-vehicles'] });
       form.reset();
       onOpenChange(false);
     },
@@ -147,12 +147,21 @@ export function VehiclesActionDialog({
   });
 
   const onSubmit = (values: z.infer<typeof vehicleSchema>) => {
+    console.log(values);
     const { avg_fuel_consumption, capacity, ...rest } = values;
-    mutate({
+    const reqData = {
       avg_fuel_consumption: Number(avg_fuel_consumption),
       capacity: Number(capacity),
       ...rest,
-    });
+    };
+    if (isEdit) {
+      mutate({
+        _id: currentRow._id,
+        ...reqData,
+      });
+    } else {
+      mutate(reqData);
+    }
   };
 
   // const isPasswordTouched = !!form.formState.dirtyFields.password;
@@ -167,11 +176,18 @@ export function VehiclesActionDialog({
     >
       <DialogContent className="sm:max-w-lg">
         <DialogHeader className="text-left">
-          <DialogTitle>{isEdit ? 'Edit User' : 'Add New User'}</DialogTitle>
+          <DialogTitle>
+            {isEdit ? 'Edit Vehicle' : 'Add New Vehicle'}
+          </DialogTitle>
           <DialogDescription>
-            {isEdit ? 'Update the user here. ' : 'Create new user here. '}
+            {isEdit ? 'Update the vehicle here. ' : 'Create new vehcle here. '}
             Click save when you&apos;re done.
           </DialogDescription>
+          {isError && (
+            <DialogDescription className="text-red-500">
+              {error?.message}
+            </DialogDescription>
+          )}
         </DialogHeader>
         <ScrollArea className="h-[26.25rem] w-full pr-4 -mr-4 py-1">
           <Form {...form}>
@@ -271,7 +287,7 @@ export function VehiclesActionDialog({
                     <SelectDropdown
                       defaultValue={field.value}
                       onValueChange={field.onChange}
-                      placeholder="Select a role"
+                      placeholder="Select current status of vehicle"
                       className="col-span-4"
                       items={vehicleStatusTypes.map(({ label, value }) => ({
                         label,
@@ -286,8 +302,8 @@ export function VehiclesActionDialog({
           </Form>
         </ScrollArea>
         <DialogFooter>
-          <Button type="submit" form="user-form">
-            Save changes
+          <Button type="submit" form="user-form" disabled={isPending}>
+            {isPending ? 'Saving...' : 'Save changes'}
           </Button>
         </DialogFooter>
       </DialogContent>

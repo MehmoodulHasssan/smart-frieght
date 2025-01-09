@@ -12,6 +12,7 @@ import { VehiclesTable } from '@/components/dashboardfeatures/vehicles/component
 import { columns } from '@/components/dashboardfeatures/vehicles/components/vehicles-columns';
 import { ApiError } from '@/utils/apiCall';
 import VehiclesProvider from '@/components/dashboardfeatures/vehicles/context/vehicles-context';
+import { VehiclesDialogs } from '@/components/dashboardfeatures/vehicles/components/vehicles-dialogs';
 
 export default function Users() {
   const {
@@ -55,7 +56,7 @@ export default function Users() {
         </div>
       </Main>
 
-      <UsersDialogs />
+      <VehiclesDialogs />
     </VehiclesProvider>
   );
 }

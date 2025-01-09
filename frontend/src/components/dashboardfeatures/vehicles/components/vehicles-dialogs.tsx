@@ -1,9 +1,9 @@
 import { useVehicles } from '../context/vehicles-context';
 import { VehiclesActionDialog } from './vehicles-action-dialog';
 import { VehiclesDeleteDialog } from './vehicles-delete';
-import { UsersInviteDialog } from './users-invite-dialog';
+// import { UsersInviteDialog } from './users-invite-dialog';
 
-export function UsersDialogs() {
+export function VehiclesDialogs() {
   const { open, setOpen, currentRow, setCurrentRow } = useVehicles();
   return (
     <>
@@ -13,11 +13,11 @@ export function UsersDialogs() {
         onOpenChange={() => setOpen('add')}
       />
 
-      <UsersInviteDialog
+      {/* <UsersInviteDialog
         key="user-invite"
         open={open === 'invite'}
         onOpenChange={() => setOpen('invite')}
-      />
+      /> */}
 
       {currentRow && (
         <>

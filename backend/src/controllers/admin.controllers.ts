@@ -242,7 +242,7 @@ export const createVehicleController = async (
     }
 
     const isVehicle = await Vehicle.findOne({
-      license_plate: rest.license_plate,
+      licence_plate: rest.licence_plate,
     });
 
     if (isVehicle) {
@@ -273,6 +273,7 @@ export const updateVehicleController = async (
     }
 
     const vehicleId = req.params.id;
+    console.log('vehicleId: ', vehicleId);
 
     if (!vehicleId) {
       return next(ApiError.badRequest('Please enter valid credentials'));
@@ -299,6 +300,7 @@ export const updateVehicleController = async (
       res
     );
   } catch (error) {
+    console.log(error);
     return next(ApiError.internal('Internal Server Error Occured!'));
   }
 };
@@ -331,7 +333,7 @@ export const deleteVehicleController = async (
 interface IUpdateVehicleReq extends Request {
   body: {
     _user: IUser;
-    license_plate: string;
+    licence_plate: string;
     vehicle_model: string;
     avg_fuel_consumption: number;
     capacity: number;

@@ -8,7 +8,7 @@ enum VehicleStatus {
 
 // Define the vehicle interface that extends Document
 interface IVehicle extends Document {
-  license_plate: string; // Unique identifier for the vehicle
+  licence_plate: string; // Unique identifier for the vehicle
   vehicle_model: string; // Specific model of the vehicle
   capacity: number; // Vehicle capacity (weight)
   status: VehicleStatus; // Availability status
@@ -21,7 +21,7 @@ interface IVehicle extends Document {
 // Create the vehicle schema
 const vehicleSchema: Schema<IVehicle> = new Schema(
   {
-    license_plate: {
+    licence_plate: {
       type: String,
       required: true,
       unique: true, // Ensure each license plate is unique

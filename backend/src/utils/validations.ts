@@ -145,7 +145,7 @@ const newOrderValidation = [
 ];
 
 const vehicleValidation = [
-  body('license_plate').isString().withMessage('License plate is required'),
+  body('licence_plate').isString().withMessage('License plate is required'),
   body('vehicle_model').isString().withMessage('Vehicle model is required'),
   body('capacity').isString().withMessage('Capacity is required'),
   body('avg_fuel_consumption')

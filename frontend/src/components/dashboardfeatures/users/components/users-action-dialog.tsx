@@ -130,8 +130,11 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
     resolver: zodResolver(userRegistrationSchema),
     defaultValues: isEdit
       ? {
-          ...currentRow,
-          // licence_no: '',
+          full_name: currentRow?.full_name || '',
+          email: currentRow?.email || '',
+          role: currentRow?.role || '',
+          phone_number: currentRow?.phone_number || '',
+          licence_no: currentRow?.driver?.licence_no || '',
           password: '',
           confirm_password: '',
           isEdit,
@@ -165,8 +168,10 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
       return;
     }
     if (form.watch('role') === 'driver') {
-      //@ts-ignore
-      form.setValue('licence_no', currentRow?.licence_no || ''); // Set the default value to empty if role is 'driver'
+      form.setValue(
+        'licence_no',
+        currentRow?.driver ? currentRow.driver.licence_no : ''
+      ); // Set the default value to empty if role is 'driver'
     }
   }, [form.watch('role')]); // Dependency on role
 

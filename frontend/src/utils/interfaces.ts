@@ -1,6 +1,6 @@
 export interface Vehicle {
   _id: string;
-  license_plate: string;
+  licence_plate: string;
   vehicle_model: string;
   capacity: number;
   status: string;
