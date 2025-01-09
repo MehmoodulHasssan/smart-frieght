@@ -35,7 +35,7 @@ export const deleteCar = async (vehicleId: string) => {
 
 interface IVehicleReq {
   _id?: string;
-  license_plate: string; // Vehicle's license plate number
+  licence_plate: string; // Vehicle's license plate number
   vehicle_model: string; // Model of the vehicle
   capacity: number; // Capacity of the vehicle in kilograms or other unit
   avg_fuel_consumption: number; // Average fuel consumption (e.g., liters per 100 km or km per liter)

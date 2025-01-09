@@ -5,17 +5,13 @@ import { ProfileDropdown } from '@/components/profile-dropdown';
 import { Search } from '@/components/search';
 import { UsersDialogs } from '@/components/dashboardfeatures/users/components/users-dialogs';
 import { VehiclesPrimaryButtons } from '@/components/dashboardfeatures/vehicles/components/vehicles-primary-buttons';
-import { UsersTable } from '@/components/dashboardfeatures/users/components/users-table';
-import UsersProvider from '@/components/dashboardfeatures/users/context/users-context';
-import { userListSchema } from '@/components/dashboardfeatures/users/data/schema';
-import { users } from '@/components/dashboardfeatures/users/data/users';
-import ThemeToggleBtn from '@/components/ThemeToggleBtn';
 import { ThemeSwitch } from '@/components/theme-switch';
 import { useQuery } from '@tanstack/react-query';
 import { getAllVehicles } from '@/utils/queries';
 import { VehiclesTable } from '@/components/dashboardfeatures/vehicles/components/vehicles-table';
 import { columns } from '@/components/dashboardfeatures/vehicles/components/vehicles-columns';
 import { ApiError } from '@/utils/apiCall';
+import VehiclesProvider from '@/components/dashboardfeatures/vehicles/context/vehicles-context';
 
 export default function Users() {
   const {
@@ -30,7 +26,7 @@ export default function Users() {
 
   // console.log(vehiclesData);
   return (
-    <UsersProvider>
+    <VehiclesProvider>
       <Header fixed>
         <Search />
         <div className="ml-auto flex items-center space-x-4">
@@ -60,6 +56,6 @@ export default function Users() {
       </Main>
 
       <UsersDialogs />
-    </UsersProvider>
+    </VehiclesProvider>
   );
 }

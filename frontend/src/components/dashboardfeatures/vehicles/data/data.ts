@@ -23,25 +23,15 @@ export const callTypes = new Map<IVehicleRes['data'][number]['status'], string>(
   ]
 );
 
-export const userTypes = [
+export const vehicleStatusTypes = [
   {
-    label: 'Admin',
-    value: 'admin',
-    icon: IconShield,
+    value: 'AVAILABLE',
+    label: 'Available',
+    icon: IconCash,
   },
   {
-    label: 'Consignor',
-    value: 'consignor',
-    icon: IconUserShield,
+    value: 'UNAVAILABLE',
+    label: 'Unavailable',
+    icon: IconUsersGroup,
   },
-  {
-    label: 'Driver',
-    value: 'driver',
-    icon: DriverIcon,
-  },
-  // {
-  //   label: 'Cashier',
-  //   value: 'cashier',
-  //   icon: IconCash,
-  // },
-] as const;
+];

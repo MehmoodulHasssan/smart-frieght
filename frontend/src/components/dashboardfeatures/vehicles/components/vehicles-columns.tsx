@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import LongText from '@/components/long-text';
-import { callTypes, userTypes } from '../data/data';
+import { callTypes } from '../data/data';
 import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
 import { IVehicleRes } from '@/utils/queries';
@@ -63,12 +63,12 @@ export const columns: ColumnDef<IVehicleRes['data'][number]>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: 'license_plate',
+    accessorKey: 'licence_plate',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="License Plate" />
     ),
     cell: ({ row }) => (
-      <div className="w-fit text-nowrap">{row.getValue('license_plate')}</div>
+      <div className="w-fit text-nowrap">{row.getValue('licence_plate')}</div>
     ),
   },
   {

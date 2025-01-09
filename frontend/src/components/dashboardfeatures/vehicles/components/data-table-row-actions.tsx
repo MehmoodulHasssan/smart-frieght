@@ -10,7 +10,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useUsers } from '../context/users-context';
+import { useVehicles } from '../context/vehicles-context';
 import { IVehicleRes } from '@/utils/queries';
 
 interface DataTableRowActionsProps {
@@ -18,7 +18,7 @@ interface DataTableRowActionsProps {
 }
 
 export function DataTableRowActions({ row }: DataTableRowActionsProps) {
-  const { setOpen, setCurrentRow } = useUsers();
+  const { setOpen, setCurrentRow } = useVehicles();
   return (
     <>
       <DropdownMenu modal={false}>

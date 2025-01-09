@@ -54,7 +54,7 @@ export interface IVehicleRes extends ApiResponse {
 
 interface IVehicle {
   _id: string; // MongoDB ObjectId represented as a string
-  license_plate: string; // Vehicle's license plate number
+  licence_plate: string; // Vehicle's license plate number
   vehicle_model: string; // Model of the vehicle
   capacity: number; // Capacity of the vehicle in kilograms or other unit
   status: 'AVAILABLE' | 'UNAVAILABLE'; // Status with specific allowed values
