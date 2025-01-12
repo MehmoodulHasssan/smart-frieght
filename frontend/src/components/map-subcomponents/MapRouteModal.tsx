@@ -47,24 +47,24 @@ function LocationMarker({ location }: { location: Location }) {
       position={[location?.position.lat, location?.position.lng]}
       icon={customLocationIcon}
     >
-      <Popup></Popup>
+      <Popup>{location?.address}</Popup>
     </Marker>
   ) : null;
 }
 
 interface PropTypes {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onOpenChange: () => void;
   geometry: string;
   from: Location;
   to: Location;
 }
 
-const MapRouteModal = ({ setOpen, from, geometry, to }: PropTypes) => {
+const MapRouteModal = ({ onOpenChange, from, geometry, to }: PropTypes) => {
   const bounds = safeDecode(geometry);
 
   return (
     <MapModalWrapper>
-      <CloseButton onClick={() => setOpen(false)} />
+      <CloseButton onClick={() => onOpenChange()} />
       <MapContainer
         style={{ height: '100%', width: '100%', zIndex: 10 }}
         center={center as LatLngExpression}

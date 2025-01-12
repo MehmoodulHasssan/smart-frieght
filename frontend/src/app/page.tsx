@@ -1,6 +1,6 @@
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
-import TestClinetCom from '@/components/TestClinetCom';
+// import TestClinetCom from '@/components/TestClinetCom';
 import React from 'react';
 
 const page = () => {

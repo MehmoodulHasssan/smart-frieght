@@ -1,3 +1,4 @@
+import { OrderStatus } from '@/utils/queries';
 import {
   IconArrowDown,
   IconArrowRight,
@@ -7,7 +8,7 @@ import {
   IconCircleX,
   IconExclamationCircle,
   IconStopwatch,
-} from '@tabler/icons-react'
+} from '@tabler/icons-react';
 
 export const labels = [
   {
@@ -22,35 +23,35 @@ export const labels = [
     value: 'documentation',
     label: 'Documentation',
   },
-]
+];
 
 export const statuses = [
   {
-    value: 'backlog',
-    label: 'Backlog',
+    value: OrderStatus.PENDING,
+    label: 'Pending',
     icon: IconExclamationCircle,
   },
+  // {
+  //   value: 'todo',
+  //   label: 'Todo',
+  //   icon: IconCircle,
+  // },
   {
-    value: 'todo',
-    label: 'Todo',
-    icon: IconCircle,
-  },
-  {
-    value: 'in progress',
-    label: 'In Progress',
+    value: OrderStatus.IN_PROGRESS,
+    label: 'IN PROGRESS',
     icon: IconStopwatch,
   },
   {
-    value: 'done',
-    label: 'Done',
+    value: OrderStatus.COMPLETED,
+    label: 'COMPLETED',
     icon: IconCircleCheck,
   },
   {
-    value: 'canceled',
-    label: 'Canceled',
+    value: OrderStatus.CANCELED,
+    label: 'CANCELED',
     icon: IconCircleX,
   },
-]
+];
 
 export const priorities = [
   {
@@ -68,4 +69,4 @@ export const priorities = [
     value: 'high',
     icon: IconArrowUp,
   },
-]
+];

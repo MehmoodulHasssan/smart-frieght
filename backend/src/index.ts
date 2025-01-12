@@ -6,7 +6,6 @@ import cookieParser from 'cookie-parser';
 import ApiError from './utils/ApiError';
 import authRouter from './routes/auth.router';
 import { NextFunction } from 'migrate';
-import { error } from 'console';
 import publicRouter from './routes/public.router';
 import consignorRouter from './routes/consignor.router';
 import adminRouter from './routes/admin.router';
@@ -21,7 +20,7 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(
   cors({
-    origin: ['http://localhost:3000'],
+    origin: ['http://localhost:3000', 'http://192.168.1.**:3000'],
     credentials: true,
     methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
   })

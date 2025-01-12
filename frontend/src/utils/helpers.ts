@@ -48,4 +48,24 @@ const formatDate = (date: Date) => {
   return formatted;
 };
 
-export { attributeToLabel, limitString, safeDecode, formatDate };
+const formatToTimeAndDate = (date: string | undefined) => {
+  if (!date) return '';
+  const newDate = new Date(date);
+  const formatted = newDate.toLocaleDateString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+  return formatted;
+};
+
+export {
+  attributeToLabel,
+  limitString,
+  safeDecode,
+  formatDate,
+  formatToTimeAndDate,
+};

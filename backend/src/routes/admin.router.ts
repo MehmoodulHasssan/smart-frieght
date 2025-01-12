@@ -1,10 +1,12 @@
 import express from 'express';
 import { authenticateUser } from '../middlewares/authenticate.user';
 import {
+  addRouteToOrderController,
   createNewUserController,
   createVehicleController,
   deleteUserController,
   deleteVehicleController,
+  getAllOrdersController,
   getAllUsersController,
   getAllVehiclesController,
   updateUserController,
@@ -52,5 +54,9 @@ adminRouter.delete(
   authenticateUser,
   deleteVehicleController
 );
+
+adminRouter.get('/all-orders', authenticateUser, getAllOrdersController);
+
+adminRouter.put('/add-route/:id', authenticateUser, addRouteToOrderController);
 
 export default adminRouter;

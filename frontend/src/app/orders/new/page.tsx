@@ -15,7 +15,7 @@ const Page = async () => {
   // console.log('reached');
   try {
     const vehiclesResponse: IVehicleRespose = await apiCall(
-      API_ROUTES.PUBLIC.GET_ALL_VEHICLES,
+      API_ROUTES.PUBLIC.GET_AVAILAIBLE_VEHICLES,
       'GET',
       undefined,
       token.value

@@ -8,6 +8,7 @@ import { ApiError } from '@/utils/apiCall';
 const AdminRoot = async ({ children }: { children: React.ReactNode }) => {
   const cookiesStore = await cookies();
   const token = cookiesStore.get('token');
+  // console.log(token);
   if (!token?.value) return redirect('/auth/login');
   try {
     const data = await verifyUser(token.value);
@@ -22,7 +23,7 @@ const AdminRoot = async ({ children }: { children: React.ReactNode }) => {
         }
       }
     }
-  } catch (error:any) {
+  } catch (error: any) {
     console.log(error?.message);
     return redirect('/auth/login');
   }

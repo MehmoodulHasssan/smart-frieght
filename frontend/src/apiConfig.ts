@@ -18,7 +18,6 @@ const API_ROUTES = {
     GET_ALL_ORDERS: API_DOMAIN + '/consignor/get-all-orders',
   },
   ADMIN: {
-    GET_ALL_ORDERS: API_DOMAIN + '/admin/get-all-orders',
     GET_ALL_USERS: API_DOMAIN + '/admin/all-users',
     GET_ALL_VEHICLES: API_DOMAIN + '/admin/all-vehicles',
     CREATE_USER: API_DOMAIN + '/admin/create-user',
@@ -27,6 +26,7 @@ const API_ROUTES = {
     CREATE_VEHICLE: API_DOMAIN + '/admin/create-vehicle',
     UPDATE_VEHICLE: API_DOMAIN + '/admin/update-vehicle',
     DELETE_VEHICLE: API_DOMAIN + '/admin/delete-vehicle',
+    GET_ALL_ORDERS: API_DOMAIN + '/admin/all-orders',
   },
   PUBLIC: {
     GET_AVAILAIBLE_VEHICLES: API_DOMAIN + '/available-vehicles',

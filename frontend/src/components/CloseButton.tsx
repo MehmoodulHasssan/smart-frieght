@@ -1,4 +1,4 @@
-import { useTheme } from '@/context/myThemeContext';
+import { useTheme } from '@/context/theme-context';
 import React from 'react';
 import { IoClose } from 'react-icons/io5';
 

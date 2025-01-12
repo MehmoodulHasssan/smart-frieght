@@ -57,7 +57,7 @@ const CreateOrder = ({ citiesData, vehiclesData }: PropTypes) => {
     },
   });
 
-  function onSubmit(data: z.infer<typeof createOrderSchema>) {
+  function onSubmit(values: z.infer<typeof createOrderSchema>) {
     if (!pickupLocation || !dropLocation) {
       toast({
         title: 'Error',
@@ -68,9 +68,9 @@ const CreateOrder = ({ citiesData, vehiclesData }: PropTypes) => {
     const reqData = {
       pickup_location: pickupLocation,
       dropoff_location: dropLocation,
-      weight: data.weight,
-      city_id: data.city,
-      vehicle_id: data.vehicle_type,
+      weight: values.weight,
+      city_id: values.city,
+      vehicle_id: values.vehicle_type,
     };
     mutate(reqData);
   }

@@ -10,17 +10,18 @@ enum OrderStatus {
 
 // Define the order interface that extends Document
 interface IOrder extends Document {
-  consignor_id: mongoose.Types.ObjectId; // Reference to consignor in Users table
-  driver_id: mongoose.Types.ObjectId; // Reference to driver in Users table
-  vehicle_id: mongoose.Types.ObjectId; // Reference to vehicle in Vehicles table
-  pickup_location_id: mongoose.Types.ObjectId; // Location for pickup
-  dropoff_location_id: mongoose.Types.ObjectId; // Location for dropoff
+  consignor: mongoose.Types.ObjectId; // Reference to consignor in Users table
+  driver: mongoose.Types.ObjectId; // Reference to driver in Users table
+  vehicle: mongoose.Types.ObjectId; // Reference to vehicle in Vehicles table
+  pickup_location: mongoose.Types.ObjectId; // Location for pickup
+  dropoff_location: mongoose.Types.ObjectId; // Location for dropoff
   status: OrderStatus; // Order status
-  pickup_time?: Date; // Expected or actual pickup time
-  dropoff_time?: Date; // Expected or actual dropoff time
+  pickup_time: Date; // Expected or actual pickup time
+  dropoff_time: Date; // Expected or actual dropoff time
   weight: number; // Weight of the goods
   consignor_attachments?: string[]; // Array of URLs for the consignor's documents/images
   driver_attachments?: string[]; // Array of URLs for the driver's documents/images
+  route?: mongoose.Types.ObjectId; // Reference to the Route table
   createdAt: Date; // Created timestamp
   updatedAt: Date; // Updated timestamp
 }
@@ -28,29 +29,33 @@ interface IOrder extends Document {
 // Create the order schema
 const orderSchema: Schema<IOrder> = new Schema(
   {
-    consignor_id: {
+    consignor: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: 'User', // Reference to the Users table
     },
-    driver_id: {
+    driver: {
       type: Schema.Types.ObjectId,
       ref: 'User', // Reference to the Users table
     },
-    vehicle_id: {
+    vehicle: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: 'Vehicle', // Reference to the Vehicles table
     },
-    pickup_location_id: {
+    pickup_location: {
       type: Schema.Types.ObjectId,
       ref: 'Location',
       required: true,
     },
-    dropoff_location_id: {
+    dropoff_location: {
       type: Schema.Types.ObjectId,
       ref: 'Location',
       required: true,
+    },
+    route: {
+      type: Schema.Types.ObjectId,
+      ref: 'Route',
     },
     status: {
       type: String,

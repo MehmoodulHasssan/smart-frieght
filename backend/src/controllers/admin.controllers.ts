@@ -8,6 +8,8 @@ import { Vehicle } from '../models/Vehicle';
 import { IUserReq } from './auth.controllers';
 import { strict } from 'assert';
 import path from 'path';
+import { Order } from '../models/Order';
+import { Route } from '../models/Route';
 
 export const getAllVehiclesController = async (
   req: Request,
@@ -273,7 +275,7 @@ export const updateVehicleController = async (
     }
 
     const vehicleId = req.params.id;
-    console.log('vehicleId: ', vehicleId);
+    // console.log('vehicleId: ', vehicleId);
 
     if (!vehicleId) {
       return next(ApiError.badRequest('Please enter valid credentials'));
@@ -323,6 +325,77 @@ export const deleteVehicleController = async (
     }
     await Vehicle.findByIdAndDelete(vehicleId);
     return new ApiResponse(200, undefined, 'Vehicle deleted successfully').send(
+      res
+    );
+  } catch (error) {
+    return next(ApiError.internal('Internal Server Error Occured!'));
+  }
+};
+
+export const getAllOrdersController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const admin: IUser = req.body._user;
+    if (admin.role !== UserRole.ADMIN) {
+      return next(ApiError.unauthorized('You are not authorized'));
+    }
+
+    const orders = await Order.find({}).populate([
+      'pickup_location',
+      'dropoff_location',
+      'vehicle',
+      'route',
+      {
+        path: 'consignor',
+        select: ['_id', 'full_name', 'email', 'phone_number'],
+      },
+      {
+        path: 'driver',
+        select: ['_id', 'full_name', 'email', 'phone_number'],
+      },
+    ]);
+
+    // console.log(orders);
+    if (!orders || orders.length == 0) {
+      return next(ApiError.notFound('No orders found'));
+    }
+
+    return new ApiResponse(200, orders, 'Orders fetched successfully').send(
+      res
+    );
+  } catch (error) {
+    console.log(error);
+    return next(ApiError.internal('Internal Server Error Occured!'));
+  }
+};
+
+export const addRouteToOrderController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const admin: IUser = req.body._user;
+    if (admin.role !== UserRole.ADMIN) {
+      return next(ApiError.unauthorized('You are not authorized'));
+    }
+
+    const orderId = req.params.id;
+    const routeDetails = req.body.route;
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return next(ApiError.badRequest('Order not found'));
+    }
+    const newRoute = await Route.create(req.body.route);
+    if (!newRoute) {
+      return next(ApiError.internal('Failed to create route'));
+    }
+    order.route = newRoute._id as any;
+    await order.save();
+    return new ApiResponse(200, undefined, 'Route added successfully').send(
       res
     );
   } catch (error) {

@@ -27,7 +27,17 @@ const getAllUsers = async (): Promise<IUserRes> => {
   return await apiCall(API_ROUTES.ADMIN.GET_ALL_USERS, 'GET');
 };
 
-export { getAddress, getAllVehicles, getConsignorOrders, getAllUsers };
+const getAllOrders = async (): Promise<IOrderRes> => {
+  return await apiCall(API_ROUTES.ADMIN.GET_ALL_ORDERS, 'GET');
+};
+
+export {
+  getAddress,
+  getAllVehicles,
+  getConsignorOrders,
+  getAllUsers,
+  getAllOrders,
+};
 
 export interface OSMPlace {
   place_id: number;
@@ -81,4 +91,58 @@ interface IDriver {
   _id: string;
   licence_no: string;
   status: 'AVAILABLE' | 'UNAVAILABLE';
+}
+
+interface ILocation {
+  _id: string;
+  latitude: number;
+  longitude: number;
+  address: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export enum OrderStatus {
+  PENDING = 'pending',
+  IN_PROGRESS = 'in-progress',
+  COMPLETED = 'completed',
+  CANCELED = 'canceled',
+}
+
+export interface IOrderRes extends ApiResponse {
+  data: IOrder[];
+}
+
+interface IOrder {
+  _id: string;
+  status: OrderStatus;
+  weight: number;
+  consignor_attachments: string[];
+  driver_attachments: string[];
+  pickup_time?: string;
+  dropoff_time?: string;
+  consignor: OrderUser;
+  driver?: OrderUser;
+  dropoff_location: ILocation;
+  pickup_location: ILocation;
+  route?: IRoute;
+  vehicle: IVehicle;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+interface IRoute {
+  _id: string;
+  geometry: string;
+  distance: number;
+  duration: number;
+}
+
+interface OrderUser {
+  _id: string;
+  full_name: string;
+  email: string;
+  phone_number: string;
 }
