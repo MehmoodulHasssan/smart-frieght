@@ -47,14 +47,13 @@ export const columns: ColumnDef<IOrderRes['data'][number]>[] = [
       <DataTableColumnHeader column={column} title="Driver" />
     ),
     cell: ({ row }) => {
-      console.log(row.original?.driver);
-      const driver = 'unknown';
+      const isDriver = row.original?.driver;
 
       return (
         <div className="flex space-x-2">
           {/* {label && <Badge variant='outline'>{}</Badge>} */}
           <span className="max-w-32 truncate font-medium sm:max-w-72 md:max-w-[31rem]">
-            {driver}
+            {isDriver ? isDriver.full_name : 'unknown'}
           </span>
         </div>
       );

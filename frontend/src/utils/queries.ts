@@ -27,8 +27,14 @@ const getAllUsers = async (): Promise<IUserRes> => {
   return await apiCall(API_ROUTES.ADMIN.GET_ALL_USERS, 'GET');
 };
 
-const getAllOrders = async (): Promise<IOrderRes> => {
-  return await apiCall(API_ROUTES.ADMIN.GET_ALL_ORDERS, 'GET');
+const getAllOrders = async (role: UserRoles): Promise<IOrderRes> => {
+  const endpoint =
+    role === UserRoles.ADMIN
+      ? API_ROUTES.ADMIN.GET_ALL_ORDERS
+      : role === UserRoles.DRIVER
+      ? API_ROUTES.DRIVER.GET_ALL_ORDERS
+      : API_ROUTES.CONSIGNOR.GET_ALL_ORDERS;
+  return await apiCall(endpoint, 'GET');
 };
 
 export {
@@ -38,6 +44,12 @@ export {
   getAllUsers,
   getAllOrders,
 };
+
+export enum UserRoles {
+  ADMIN = 'admin',
+  DRIVER = 'driver',
+  CONSIGNOR = 'consignor',
+}
 
 export interface OSMPlace {
   place_id: number;
@@ -82,6 +94,7 @@ interface IUser {
   role: 'driver' | 'admin' | 'consignor'; // adjust roles as necessary
   full_name: string;
   driver?: IDriver;
+  profile_picture?: string;
   phone_number: string;
   createdAt: Date;
   updatedAt: Date;
@@ -105,7 +118,7 @@ interface ILocation {
 
 export enum OrderStatus {
   PENDING = 'pending',
-  IN_PROGRESS = 'in-progress',
+  IN_PROGRESS = 'in_progress',
   COMPLETED = 'completed',
   CANCELED = 'canceled',
 }

@@ -16,6 +16,7 @@ interface IUser extends Document {
   phone_number: string;
   password: string;
   role: UserRole;
+  profile_picture?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -38,6 +39,9 @@ const userSchema: Schema<IUser> = new Schema(
       type: String,
       required: true,
       unique: true,
+    },
+    profile_picture: {
+      type: String,
     },
     password: {
       type: String,

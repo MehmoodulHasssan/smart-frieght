@@ -3,6 +3,7 @@ import bcryptjs from 'bcryptjs';
 import dotenv from 'dotenv';
 import ApiError from './ApiError';
 import { Types } from 'mongoose';
+import { IUser, User } from '../models/User';
 dotenv.config();
 
 // Token generation
@@ -45,4 +46,20 @@ const comparePassword = async (password: string, hashedPassword: string) => {
   return match;
 };
 
-export { generateToken, verifyToken, hashPassword, comparePassword };
+const findUserById = async (userId: string) => {
+  try {
+    const user = await User.findById(userId).lean();
+    return user as IUser;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export {
+  generateToken,
+  verifyToken,
+  hashPassword,
+  comparePassword,
+  findUserById,
+};

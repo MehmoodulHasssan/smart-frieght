@@ -3,6 +3,8 @@ import { ThemeProvider } from '@/context/theme-context';
 import React from 'react';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { AuthContextProvider } from '@/context/authContext';
+import { SocketProvider } from '@/context/socketContext';
+import { Toaster } from './ui/toaster';
 // import { MapProvider } from '@/context/mapContext';
 
 const ContextWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -10,9 +12,12 @@ const ContextWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <QueryClientProvider client={client}>
       <AuthContextProvider>
-        <ThemeProvider storageKey="smart-frieght-theme">
-          {children}
-        </ThemeProvider>
+        <SocketProvider>
+          <ThemeProvider storageKey="smart-frieght-theme">
+            {children}
+            <Toaster />
+          </ThemeProvider>
+        </SocketProvider>
       </AuthContextProvider>
     </QueryClientProvider>
   );

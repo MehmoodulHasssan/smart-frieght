@@ -1,7 +1,11 @@
 import { API_ROUTES } from '@/apiConfig';
 import { apiCall, ApiResponse } from '../apiCall';
+import { UserRoles } from '../queries';
 
-const loginUser = async (data: { email: string; password: string }) => {
+const loginUser = async (data: {
+  email: string;
+  password: string;
+}): Promise<IUserResponse> => {
   return await apiCall(API_ROUTES.AUTH.LOGIN, 'POST', data);
 };
 
@@ -18,7 +22,7 @@ const registerUser = async (data: IUserReq) => {
 //   return await apiCall(API_ROUTES.AUTH.REGISTER_CONSIGNOR, 'POST', data);
 // };
 
-export const verifyUser = async (token: string): Promise<IUserResponse> => {
+export const verifyUser = async (token?: string): Promise<IUserResponse> => {
   return await apiCall(API_ROUTES.AUTH.VERIFY, 'POST', undefined, token);
 };
 
@@ -32,9 +36,10 @@ interface IUserResponse extends ApiResponse {
   data: {
     _id: string;
     email: string;
-    role: 'driver' | 'admin' | 'customer'; // adjust roles as necessary
+    role: UserRoles;
     full_name: string;
     phone_number: string;
+    profile_picture?: string;
   };
 }
 

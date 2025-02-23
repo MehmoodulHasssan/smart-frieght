@@ -11,7 +11,14 @@ import { useAuthContext } from '@/context/authContext';
 import { logoutUser } from '@/utils/mutations/authMutations';
 import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
-import { navData } from '@/utils/data';
+import {
+  consignorNavData,
+  driverNavData,
+  unregisteredNavData,
+} from '@/utils/data';
+import { UserRoles } from '@/utils/queries';
+import { ProfileDropdown } from './profile-dropdown';
+import { ThemeSwitch } from './theme-switch';
 // import logo from '/vercel.svg';
 
 const Header = () => {
@@ -43,9 +50,16 @@ const Header = () => {
     if (currentUser) {
       mutate();
     } else {
+      // console.log('reached');
       router.push('/auth/login');
     }
   };
+
+  const navData = currentUser
+    ? currentUser?.role === UserRoles.CONSIGNOR
+      ? consignorNavData
+      : driverNavData
+    : unregisteredNavData;
 
   return (
     <nav className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-md">
@@ -78,12 +92,18 @@ const Header = () => {
       {/* Right side: Dark mode toggle and Login button */}
       <div className="flex items-center space-x-2 lg:space-x-4">
         {/* Dark mode toggle */}
-        <ThemeToggleBtn />
-        <GradientButton
-          title={currentUser ? 'Log Out' : 'Log In'}
-          onClick={handleClick}
-        />
-        <HamBurger />
+        <ThemeSwitch />
+        {currentUser ? (
+          <ProfileDropdown />
+        ) : (
+          <>
+            <GradientButton
+              title={currentUser ? 'Log Out' : 'Log In'}
+              onClick={handleClick}
+            />
+            <HamBurger />
+          </>
+        )}
         {/* Login button */}
       </div>
     </nav>

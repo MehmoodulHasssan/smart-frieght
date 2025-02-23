@@ -8,14 +8,14 @@ import { UsersDialogs } from '@/components/dashboardfeatures/users/components/us
 import { UsersPrimaryButtons } from '@/components/dashboardfeatures/users/components/users-primary-buttons';
 import { UsersTable } from '@/components/dashboardfeatures/users/components/users-table';
 import UsersProvider from '@/components/dashboardfeatures/users/context/users-context';
-import { userListSchema } from '@/components/dashboardfeatures/users/data/schema';
-import { users } from '@/components/dashboardfeatures/users/data/users';
-import ThemeToggleBtn from '@/components/ThemeToggleBtn';
+// import { userListSchema } from '@/components/dashboardfeatures/users/data/schema';
+// import { users } from '@/components/dashboardfeatures/users/data/users';
+// import ThemeToggleBtn from '@/components/ThemeToggleBtn';
 import { ThemeSwitch } from '@/components/theme-switch';
-import { useAuthContext } from '@/context/authContext';
+// import { useAuthContext } from '@/context/authContext';
 import { useQuery } from '@tanstack/react-query';
 import { getAllUsers } from '@/utils/queries';
-import Loader from '@/components/Loader';
+// import Loader from '@/components/Loader';
 import { ApiError } from '@/utils/apiCall';
 
 export default function Users() {

@@ -45,6 +45,10 @@ const CreateOrder = ({ citiesData, vehiclesData }: PropTypes) => {
     },
     onError: (error) => {
       console.log(error);
+      toast({
+        title: 'Error',
+        description: error?.message,
+      });
     },
   });
   const form = useForm<z.infer<typeof createOrderSchema>>({
@@ -77,7 +81,6 @@ const CreateOrder = ({ citiesData, vehiclesData }: PropTypes) => {
   // console.log(vehiclesData);
   return (
     <>
-      <Header />
       <div className="flex flex-col justify-center pb-12 space-y-4 items-center mt-12">
         <h1 className="text-2xl font-geist-bold text-center">Place Order</h1>
         <FormProvider {...form}>

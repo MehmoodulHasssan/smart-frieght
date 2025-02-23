@@ -17,7 +17,7 @@ const authenticateUser = async (
     return next(ApiError.unauthorized('User not authorized'));
   }
   try {
-    const decoded = await verifyToken(token);
+    const decoded = verifyToken(token);
     // console.log('Decoded: ', decoded);
     const isUser = await User.findById(decoded._id);
     if (!isUser) {

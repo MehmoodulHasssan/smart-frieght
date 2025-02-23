@@ -25,6 +25,7 @@ import { DataTablePagination } from './data-table-pagination';
 import { DataTableToolbar } from './data-table-toolbar';
 import { IOrderRes } from '@/utils/queries';
 import { ApiError } from '@/utils/apiCall';
+import Loader from '@/components/Loader';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<IOrderRes['data'][number], TValue>[];
@@ -36,6 +37,8 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
+  error,
+  isLoading,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -113,7 +116,13 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {isLoading ? (
+                    <Loader />
+                  ) : error ? (
+                    error.message
+                  ) : (
+                    'No results.'
+                  )}
                 </TableCell>
               </TableRow>
             )}

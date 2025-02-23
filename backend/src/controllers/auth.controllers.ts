@@ -6,7 +6,6 @@ import { DriverStatus, Driver } from '../models/Driver';
 import ApiResponse from '../utils/ApiResponse';
 import { comparePassword, generateToken } from '../utils/authUtils';
 import { Types } from 'mongoose';
-import { registerValidation } from '../utils/validations';
 
 const loginController = async (
   req: Request,
@@ -21,7 +20,11 @@ const loginController = async (
       );
     }
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const user = await User.findOne(
+      { email },
+      '-createdAt -updatedAt -driver -__v'
+    ).lean();
+    console.log('User: ', user);
     if (!user) {
       return next(ApiError.badRequest('This email is not registerd'));
     }
@@ -30,24 +33,17 @@ const loginController = async (
       return next(ApiError.badRequest('Your password is not correct'));
     }
     const token = generateToken(user._id as Types.ObjectId);
-    const userResponse = {
-      _id: user._id,
-      email: user.email,
-      role: user.role,
-      full_name: user.full_name,
-      phone_number: user.phone_number,
-    };
+
+    //@ts-ignore
+    delete user.password;
+
     res.cookie('token', token, {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
     });
 
-    return new ApiResponse(
-      200,
-      userResponse,
-      'User logged in successfully'
-    ).send(res);
+    return new ApiResponse(200, user, 'User logged in successfully').send(res);
   } catch (error) {
     console.log(error);
     if (error instanceof ApiError) {
@@ -56,55 +52,6 @@ const loginController = async (
     return next(ApiError.internal('Internal Server Error'));
   }
 };
-
-// const consignorRegisterController = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     const errors = validationResult(req);
-//     if (!errors.isEmpty()) {
-//       return next(
-//         ApiError.badRequest('Please enter valid credentials', errors.array())
-//       );
-//     }
-//     const { full_name, email, phone_number, password } = req.body;
-
-//     const user = await User.findOne().where('email').equals(email);
-
-//     if (user) {
-//       return next(ApiError.badRequest('This email is already registerd'));
-//     }
-//     const consignor = await User.create({
-//       full_name,
-//       email,
-//       password,
-//       phone_number,
-//       role: UserRole.CONSIGNOR,
-//     });
-
-//     if (!consignor) {
-//       return next(ApiError.internal('Failed to create user.Please try again'));
-//     }
-//     const userResponse = {
-//       id: consignor._id,
-//       full_name: consignor.full_name,
-//       email: consignor.email,
-//       phone_number: consignor.phone_number,
-//       role: consignor.role,
-//     };
-
-//     return new ApiResponse(200, userResponse, 'User created successfully').send(
-//       res
-//     );
-//   } catch (error) {
-//     if (error instanceof ApiError) {
-//       return next(error);
-//     }
-//     return next(ApiError.internal('Internal Server Error'));
-//   }
-// };
 
 const userRegisterController = async (
   req: Request,
@@ -227,6 +174,7 @@ const verifyUserController = async (
       role: user.role,
       full_name: user.full_name,
       phone_number: user.phone_number,
+      profile_picture: user.profile_picture,
     };
     return new ApiResponse(
       200,

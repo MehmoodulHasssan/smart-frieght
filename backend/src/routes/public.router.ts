@@ -9,4 +9,5 @@ const publicRouter = express.Router();
 publicRouter.get('/all-cities', authenticateUser, getAllCities);
 publicRouter.get('/available-vehicles', getAvailableVehiclesController);
 
+
 export default publicRouter;

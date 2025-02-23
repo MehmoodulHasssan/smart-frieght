@@ -2,14 +2,16 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { verifyUser } from '@/utils/mutations/authMutations';
+import { UserRoles } from '@/utils/queries';
 
 interface AuthContextType {
   currentUser: {
     _id: string;
     email: string;
-    role: 'driver' | 'admin' | 'customer'; // adjust roles as necessary
+    role: UserRoles;
     full_name: string;
     phone_number: string;
+    profile_picture?: string;
   } | null;
   setCurrentUser: React.Dispatch<
     React.SetStateAction<AuthContextType['currentUser'] | null>
@@ -38,7 +40,7 @@ export const AuthContextProvider = ({
 
   useEffect(() => {
     if (!currentUser) {
-      mutate();
+      mutate('');
     }
   }, [currentUser, mutate]);
 

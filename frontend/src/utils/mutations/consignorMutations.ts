@@ -3,6 +3,7 @@ import { apiCall } from '../apiCall';
 import { API_ROUTES } from '@/apiConfig';
 
 const placeOrder = async (data: INewOrder): Promise<any> => {
+  console.log(data);
   return await apiCall(API_ROUTES.CONSIGNOR.PLACE_ORDER, 'POST', data);
 };
 

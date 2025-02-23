@@ -11,10 +11,16 @@ import { OrdersPrimaryButtons } from '@/components/dashboardfeatures/orders/comp
 import TasksProvider from '@/components/dashboardfeatures/orders/context/orders-context';
 import { tasks } from '@/components/dashboardfeatures/orders/data/tasks';
 import { useQuery } from '@tanstack/react-query';
-import { getAllOrders, UserRoles } from '@/utils/queries';
+import { getAllOrders, OrderStatus, UserRoles } from '@/utils/queries';
 import { ApiError } from '@/utils/apiCall';
+import { useAuthContext } from '@/context/authContext';
+import { useSocket } from '@/context/socketContext';
+import { useEffect } from 'react';
 
 export default function Orders() {
+  const { currentUser } = useAuthContext();
+  const { sendLocationStreams, abortLocationStreams, currWatchId } =
+    useSocket();
   const {
     data: ordersData,
     isLoading: ordersLoading,
@@ -22,20 +28,34 @@ export default function Orders() {
     isError: isOrdersError,
   } = useQuery({
     queryKey: ['all-orders'],
-    queryFn: () => getAllOrders(UserRoles.ADMIN),
+    queryFn: () => getAllOrders(currentUser?.role as UserRoles),
   });
-  console.log(ordersData?.data);
+
+  useEffect(() => {
+    if (ordersData) {
+      const isProgressOrder = ordersData?.data.some(
+        (order) => order.status === OrderStatus.IN_PROGRESS
+      );
+      if (!isProgressOrder && currWatchId) {
+        abortLocationStreams();
+      }
+      if (isProgressOrder && !currWatchId) {
+        sendLocationStreams();
+      }
+    }
+  }, [ordersData]);
+
   return (
     <TasksProvider>
-      <Header fixed>
+      {/* <Header fixed>
         <Search />
         <div className="ml-auto flex items-center space-x-4">
           <ThemeSwitch />
           <ProfileDropdown />
         </div>
-      </Header>
-
-      <Main>
+      </Header> */}
+      {/* <Header /> */}
+      <Main className="mx-4 md:mx-8">
         <div className="mb-2 flex items-center justify-between space-y-2 flex-wrap gap-x-4">
           <div>
             <h2 className="text-2xl font-bold tracking-tight">Orders</h2>

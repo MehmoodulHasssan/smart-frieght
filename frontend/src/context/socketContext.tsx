@@ -1,12 +1,24 @@
-import { API_DOMAIN } from '@/apiConfig';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { API_BASE_URL, API_DOMAIN } from '@/apiConfig';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useAuthContext } from './authContext';
+import { set } from 'zod';
+import { toast } from '@/hooks/use-toast';
 
 // Define the context type for Socket.IO
 interface SocketContextType {
   socket: Socket | null;
-  //   initializeSocket: () => void;
+  connectToSocket: () => void;
+  disconnectFromSocket: () => void;
+  sendLocationStreams: () => void;
+  abortLocationStreams: () => void;
+  currWatchId: number | null;
 }
 
 // Create the context
@@ -16,34 +28,82 @@ const SocketContext = createContext<SocketContextType | undefined>(undefined);
 export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const { currentUser } = useAuthContext();
+  const watchIdRef = useRef<number | null>(null);
 
-  //   const initializeSocket = () => {
-  //     const socketInstance = io(API_DOMAIN, {
-  //       query: {
-  //         userId: currentUser?._id,
-  //       },
-  //     });
-  //     setSocket(socketInstance);
-  //   };
+  const connectToSocket = () => {
+    if (socket) {
+      return;
+    }
+    console.log('connecting to socket...');
+    const socketInstance = io(API_BASE_URL, {
+      query: {
+        userId: currentUser?._id,
+      },
+      withCredentials: true,
+    });
+    //here add any event listner needed wtih reference to this socket
+
+    setSocket(socketInstance);
+  };
+
+  const sendLocationStreams = () => {
+    watchIdRef.current = navigator.geolocation.watchPosition(
+      //if permission granted
+      (position) => {
+        socket?.emit('locationEvent', position.coords);
+      },
+      //if permission denied
+      (error) => {
+        console.error(error);
+        watchIdRef.current = null;
+        toast({
+          title: 'Error',
+          description: 'Location permission denied',
+          variant: 'destructive',
+        });
+      },
+      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+    );
+  };
+
+  const abortLocationStreams = () => {
+    if (!watchIdRef.current) return;
+    navigator.geolocation.clearWatch(watchIdRef.current);
+    watchIdRef.current = null;
+  };
+
+  const disconnectFromSocket = () => {
+    if (socket) {
+      socket.disconnect();
+      setSocket(null);
+    }
+  };
 
   useEffect(() => {
     // Initialize the socket connection
     if (!currentUser) return;
-    const socketInstance = io(API_DOMAIN, {
-      query: {
-        userId: currentUser?._id,
-      },
-    });
-    setSocket(socketInstance);
+    connectToSocket();
 
     // Cleanup on component unmount
     return () => {
-      socketInstance.disconnect();
+      if (socket) {
+        socket.disconnect();
+        setSocket(null);
+      }
     };
-  }, [currentUser]);
+  }, [currentUser, socket]);
 
   return (
-    <SocketContext.Provider value={{ socket }}>
+    <SocketContext.Provider
+      value={{
+        socket,
+        currWatchId: watchIdRef.current,
+        connectToSocket,
+        disconnectFromSocket,
+        sendLocationStreams,
+        abortLocationStreams,
+      }}
+    >
       {children}
     </SocketContext.Provider>
   );

@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { useRouter } from 'next/navigation';
+import { unregisteredNavData } from '@/utils/data';
 
 const HamBurger = () => {
   const { theme } = useTheme();
@@ -40,18 +41,14 @@ const HamBurger = () => {
             {'Login'}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => router.push('/')}>
-            Home
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push('/')}>
-            Book a truck
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push('/')}>
-            Contact us
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push('/')}>
-            About
-          </DropdownMenuItem>
+          {unregisteredNavData.map((item) => (
+            <DropdownMenuItem
+              key={item.title}
+              onClick={() => router.push(item.href)}
+            >
+              {item.title}
+            </DropdownMenuItem>
+          ))}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

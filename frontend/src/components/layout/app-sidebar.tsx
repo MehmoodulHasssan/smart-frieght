@@ -3,6 +3,7 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  SidebarMenuButton,
   SidebarRail,
 } from '@/components/ui/sidebar';
 import { NavGroup } from '@/components/layout/nav-group';
@@ -10,13 +11,29 @@ import { NavUser } from '@/components/layout/nav-user';
 import { TeamSwitcher } from '@/components/layout/team-switcher';
 import { sidebarData } from './data/sidebar-data';
 import { useAuthContext } from '@/context/authContext';
+import Image from 'next/image';
+import { Truck } from 'lucide-react';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { currentUser } = useAuthContext();
   return (
     <Sidebar collapsible="icon" variant="floating" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={sidebarData.teams} />
+        <SidebarMenuButton
+          size="lg"
+          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+        >
+          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+            <Truck className="size-4" />
+          </div>
+          <div className="grid flex-1 text-left text-sm leading-tight">
+            <span className="truncate font-semibold">{'Smart Frieght'}</span>
+            <span className="truncate text-xs">
+              {'Automated logistics solutions'}
+            </span>
+          </div>
+          {/* <ChevronsUpDow className='ml-auto' /> */}
+        </SidebarMenuButton>
       </SidebarHeader>
       <SidebarContent>
         {sidebarData.navGroups.map((props) => (
@@ -29,8 +46,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             user={{
               name: currentUser?.full_name,
               email: currentUser?.email,
-              avatar:
-                'https://marketplace.canva.com/EAFuJ5pCLLM/1/0/1600w/canva-black-and-gold-simple-business-man-linkedin-profile-picture-BM_NPo97JwE.jpg',
+              avatar: currentUser?.profile_picture || '',
             }}
           />
         )}

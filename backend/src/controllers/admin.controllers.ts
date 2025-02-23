@@ -10,6 +10,7 @@ import { strict } from 'assert';
 import path from 'path';
 import { Order } from '../models/Order';
 import { Route } from '../models/Route';
+import { getOrdersQuery } from './contollers.utils';
 
 export const getAllVehiclesController = async (
   req: Request,
@@ -343,20 +344,9 @@ export const getAllOrdersController = async (
       return next(ApiError.unauthorized('You are not authorized'));
     }
 
-    const orders = await Order.find({}).populate([
-      'pickup_location',
-      'dropoff_location',
-      'vehicle',
-      'route',
-      {
-        path: 'consignor',
-        select: ['_id', 'full_name', 'email', 'phone_number'],
-      },
-      {
-        path: 'driver',
-        select: ['_id', 'full_name', 'email', 'phone_number'],
-      },
-    ]);
+    const orders = await Order.find({}).populate(getOrdersQuery);
+
+    // console.log(orders[0].driver);
 
     // console.log(orders);
     if (!orders || orders.length == 0) {

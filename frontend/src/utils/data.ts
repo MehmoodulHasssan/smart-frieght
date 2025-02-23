@@ -1,7 +1,20 @@
-const navData = [
+const unregisteredNavData = [
+  { title: 'Home', href: '/' },
+  { title: 'About', href: '/about' },
+  { title: 'Contact Us', href: '/contact-us' },
+];
+
+const driverNavData = [
+  { title: 'Home', href: '/' },
+  { title: 'My orders', href: '/orders' },
+  { title: 'About', href: '/about' },
+  { title: 'Contact Us', href: '/contact-us' },
+];
+
+const consignorNavData = [
   { title: 'Home', href: '/' },
   { title: 'Place an order', href: '/orders/new' },
-  { title: 'My orders', href: '/orders/consignor' },
+  { title: 'My orders', href: '/orders' },
   { title: 'About', href: '/about' },
   { title: 'Contact Us', href: '/contact-us' },
 ];
@@ -117,4 +130,10 @@ const transportVehicles = [
   },
 ];
 
-export { navData, citiesData, transportVehicles };
+export {
+  consignorNavData,
+  driverNavData,
+  unregisteredNavData,
+  citiesData,
+  transportVehicles,
+};

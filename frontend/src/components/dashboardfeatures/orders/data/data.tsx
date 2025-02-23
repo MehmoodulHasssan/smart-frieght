@@ -38,17 +38,17 @@ export const statuses = [
   // },
   {
     value: OrderStatus.IN_PROGRESS,
-    label: 'IN PROGRESS',
+    label: 'In Progress',
     icon: IconStopwatch,
   },
   {
     value: OrderStatus.COMPLETED,
-    label: 'COMPLETED',
+    label: 'Completed',
     icon: IconCircleCheck,
   },
   {
     value: OrderStatus.CANCELED,
-    label: 'CANCELED',
+    label: 'Canceled',
     icon: IconCircleX,
   },
 ];

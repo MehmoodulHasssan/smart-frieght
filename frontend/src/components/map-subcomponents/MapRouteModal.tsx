@@ -61,6 +61,7 @@ interface PropTypes {
 
 const MapRouteModal = ({ onOpenChange, from, geometry, to }: PropTypes) => {
   const bounds = safeDecode(geometry);
+  console.log('Geometry Bounds: ', bounds);
 
   return (
     <MapModalWrapper>

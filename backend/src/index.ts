@@ -9,6 +9,7 @@ import { NextFunction } from 'migrate';
 import publicRouter from './routes/public.router';
 import consignorRouter from './routes/consignor.router';
 import adminRouter from './routes/admin.router';
+import driverRouter from './routes/driver.router';
 
 const port: number = process.env.PORT as unknown as number;
 
@@ -32,10 +33,11 @@ app.use(cookieParser());
 app.get('/', (req, res) => {
   res.send('Hellow world!');
 });
+app.use('/api', publicRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/consignor', consignorRouter);
-app.use('/api', publicRouter);
 app.use('/api/admin', adminRouter);
+app.use('/api/driver', driverRouter);
 
 //error handler
 app.use(

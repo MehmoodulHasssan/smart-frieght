@@ -33,6 +33,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createNewUser, updateUser } from '@/utils/mutations/adminMutations';
 import { ApiResponse } from '@/utils/apiCall';
 import { useEffect } from 'react';
+import ProfileImage from '@/components/profile-image';
+import { FileEdit } from 'lucide-react';
 
 const formSchema = z.object({
   firstName: z.string().min(1, { message: 'First Name is required.' }),
@@ -192,12 +194,41 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="h-[26.25rem] w-full pr-4 -mr-4 py-1">
+          <ProfileImage
+            initialImage={currentRow?.profile_picture || ''}
+            onImageChange={(file) => console.log(file)}
+            editIcon={
+              'https://cdn.iconscout.com/icon/free/png-256/free-edit-icon-download-in-svg-png-gif-file-formats--pen-write-pencil-ball-study-user-interface-vol-2-pack-icons-2202989.png?f=webp&w=256'
+            }
+            key={currentRow?._id || 'image'}
+          />
           <Form {...form}>
             <form
               id="user-form"
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-4 p-0.5"
             >
+              {/* <FormField
+                control={form.control}
+                name="profile_image"
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
+                    <FormLabel className="col-span-2 text-right">
+                      Profile Image
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="file"
+                        placeholder="John Doe"
+                        className="col-span-4"
+                        autoComplete="off"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="col-span-4 col-start-3" />
+                  </FormItem>
+                )}
+                /> */}
               <FormField
                 control={form.control}
                 name="full_name"

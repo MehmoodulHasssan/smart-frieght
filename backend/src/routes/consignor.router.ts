@@ -1,5 +1,8 @@
 import express from 'express';
-import { placeOrderController } from '../controllers/consignor.controllers';
+import {
+  placeOrderController,
+  getAllOrdersController,
+} from '../controllers/consignor.controllers';
 import { newOrderValidation } from '../utils/validations';
 import { authenticateUser } from '../middlewares/authenticate.user';
 
@@ -11,6 +14,6 @@ consignorRouter.post(
   newOrderValidation,
   placeOrderController
 );
-consignorRouter.get('/get-all-orders', authenticateUser, placeOrderController);
+consignorRouter.get('/all-orders', authenticateUser, getAllOrdersController);
 
 export default consignorRouter;

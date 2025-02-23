@@ -1,4 +1,5 @@
-const API_DOMAIN = 'http://localhost:8000/api';
+const API_BASE_URL = 'http://localhost:8000';
+const API_DOMAIN = API_BASE_URL + '/api';
 const MAP_API_DOMAIN = 'https://nominatim.openstreetmap.org';
 
 const API_ROUTES = {
@@ -11,11 +12,11 @@ const API_ROUTES = {
   },
   DRIVER: {
     UPDATE_STATUS: API_DOMAIN + '/driver/update-status',
-    GET_ALL_ORDERS: API_DOMAIN + '/driver/get-all-orders',
+    GET_ALL_ORDERS: API_DOMAIN + '/driver/all-orders',
   },
   CONSIGNOR: {
     PLACE_ORDER: API_DOMAIN + '/consignor/place-order',
-    GET_ALL_ORDERS: API_DOMAIN + '/consignor/get-all-orders',
+    GET_ALL_ORDERS: API_DOMAIN + '/consignor/all-orders',
   },
   ADMIN: {
     GET_ALL_USERS: API_DOMAIN + '/admin/all-users',
@@ -34,4 +35,4 @@ const API_ROUTES = {
   },
 };
 
-export { API_ROUTES, API_DOMAIN, MAP_API_DOMAIN };
+export { API_ROUTES, API_DOMAIN, MAP_API_DOMAIN, API_BASE_URL };
