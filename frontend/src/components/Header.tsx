@@ -46,15 +46,6 @@ const Header = () => {
     },
   });
 
-  const handleClick = () => {
-    if (currentUser) {
-      mutate();
-    } else {
-      // console.log('reached');
-      router.push('/auth/login');
-    }
-  };
-
   const navData = currentUser
     ? currentUser?.role === UserRoles.CONSIGNOR
       ? consignorNavData
@@ -98,8 +89,12 @@ const Header = () => {
         ) : (
           <>
             <GradientButton
-              title={currentUser ? 'Log Out' : 'Log In'}
-              onClick={handleClick}
+              title={'Register'}
+              onClick={() => router.push('/auth/register')}
+            />
+            <GradientButton
+              title={'Log In'}
+              onClick={() => router.push('/auth/login')}
             />
             <HamBurger />
           </>

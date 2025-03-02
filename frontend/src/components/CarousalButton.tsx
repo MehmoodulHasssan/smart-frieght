@@ -3,13 +3,16 @@ import { CarouselApi } from '@/components/ui/carousel';
 import { cn } from '@/lib/utils';
 
 interface PropTypes extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  api: CarouselApi;
-  index: number;
-  item: {
-    name: string;
-    component: React.JSX.Element;
-  };
-  current: number;
+  // api: CarouselApi;
+  label: string;
+  forRole: 'driver' | 'consignor';
+  currState: 'driver' | 'consignor';
+  // index: number;
+  // item: {
+  //   name: string;
+  //   component: React.JSX.Element;
+  // };
+  setCurrState: React.Dispatch<React.SetStateAction<'driver' | 'consignor'>>;
 }
 
 const CarousalButton = (props: PropTypes) => {
@@ -17,12 +20,14 @@ const CarousalButton = (props: PropTypes) => {
     <button
       className={cn(
         'relative px-2 py-1 text-sm font-geist-semibold transition-colors',
-        props.current === props.index ? 'text-primary' : 'text-muted-foreground'
+        props.currState === props.forRole
+          ? 'text-primary'
+          : 'text-muted-foreground'
       )}
-      onClick={() => props.api?.scrollTo(props.index)}
+      onClick={() => props.setCurrState(props.forRole)}
     >
-      {props.item.name}
-      {props.current === props.index && (
+      {props.label}
+      {props.currState === props.forRole && (
         <span className="absolute bottom-0 left-0 h-0.5 w-full bg-primary transition-all duration-300" />
       )}
     </button>

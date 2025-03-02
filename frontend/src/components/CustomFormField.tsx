@@ -27,7 +27,7 @@ const CustomFormField = <T extends FieldValues>(
       control={props.control}
       name={props.name}
       render={({ field }) => {
-        // console.log(field.value);
+        // console.log(field.name, field.value);
         return (
           <FormItem className="w-full">
             <FormLabel>{props.label}</FormLabel>

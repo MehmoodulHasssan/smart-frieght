@@ -70,6 +70,22 @@ const getAvatarFallBack = (full_name: string) => {
     return nameArray[0][0]?.toUpperCase();
   }
 };
+
+const renderRegisterInitValues = (role: 'driver' | 'consignor') => {
+  const initialValues = {
+    full_name: '',
+    phone_number: '',
+    email: '',
+    password: '',
+    confirm_password: '',
+    role,
+  };
+  if (role === 'driver') {
+    return { ...initialValues, licence_no: '' };
+  }
+  return initialValues;
+};
+
 export {
   attributeToLabel,
   getAvatarFallBack,
@@ -77,4 +93,5 @@ export {
   safeDecode,
   formatDate,
   formatToTimeAndDate,
+  renderRegisterInitValues,
 };

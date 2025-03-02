@@ -40,6 +40,12 @@ const HamBurger = () => {
           >
             {'Login'}
           </DropdownMenuLabel>
+          <DropdownMenuLabel
+            onClick={() => router.push('/auth/register')}
+            className="active:opacity-70"
+          >
+            {'Register'}
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
           {unregisteredNavData.map((item) => (
             <DropdownMenuItem

@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { userRegistrationSchema } from '@/utils/validationSchemas';
+import { driverRegisterSchema } from '@/utils/validationSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import CustomFormField from '@/components/CustomFormField';
@@ -11,6 +11,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
 import { ApiError } from '@/utils/apiCall';
 import { registerUser } from '@/utils/mutations/authMutations';
+import { renderRegisterInitValues } from '@/utils/helpers';
 
 const DriverRegister = () => {
   const router = useRouter();
@@ -33,22 +34,17 @@ const DriverRegister = () => {
       });
     },
   });
-  const form = useForm<z.infer<typeof userRegistrationSchema>>({
+  const form = useForm<z.infer<typeof driverRegisterSchema>>({
     mode: 'onChange',
-    resolver: zodResolver(userRegistrationSchema),
-    defaultValues: {
-      full_name: '',
-      phone_number: '',
-      licence_no: '',
-      email: '',
-      password: '',
-      confirm_password: '',
-      role: 'driver',
-    },
+    resolver: zodResolver(driverRegisterSchema),
+    defaultValues: renderRegisterInitValues('driver'),
   });
 
-  function onSubmit(values: z.infer<typeof userRegistrationSchema>) {
-    console.log(values);
+  console.log(renderRegisterInitValues('driver'));
+  function onSubmit({
+    isEdit,
+    ...values
+  }: z.infer<typeof driverRegisterSchema>) {
     mutate(values);
   }
 
@@ -106,7 +102,12 @@ const DriverRegister = () => {
                 Login
               </button>
             </div>
-            <Button disabled={isPending} className="max-w-fit" type="submit">
+            <Button
+              disabled={isPending}
+              className="max-w-fit"
+              type="submit"
+              onClick={form.handleSubmit(onSubmit)}
+            >
               {isPending ? 'Registering...' : 'Register'}
             </Button>
           </form>

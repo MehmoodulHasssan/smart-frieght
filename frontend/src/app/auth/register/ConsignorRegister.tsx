@@ -2,10 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import {
-  consignorRegisterSchema,
-  userRegistrationSchema,
-} from '@/utils/validationSchemas';
+import { consignorRegisterSchema } from '@/utils/validationSchemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import CustomFormField from '@/components/CustomFormField';
@@ -14,6 +11,7 @@ import { useMutation } from '@tanstack/react-query';
 import { registerUser } from '@/utils/mutations/authMutations';
 import { useToast } from '@/hooks/use-toast';
 import { ApiError } from '@/utils/apiCall';
+import { renderRegisterInitValues } from '@/utils/helpers';
 
 const ConsignorRegister = () => {
   const { toast } = useToast();
@@ -37,20 +35,16 @@ const ConsignorRegister = () => {
     },
   });
   const router = useRouter();
-  const form = useForm<z.infer<typeof userRegistrationSchema>>({
+  const form = useForm<z.infer<typeof consignorRegisterSchema>>({
     mode: 'onChange',
-    resolver: zodResolver(userRegistrationSchema),
-    defaultValues: {
-      full_name: '',
-      phone_number: '',
-      email: '',
-      password: '',
-      confirm_password: '',
-      role: 'consignor',
-    },
+    resolver: zodResolver(consignorRegisterSchema),
+    defaultValues: renderRegisterInitValues('consignor'),
   });
 
-  function onSubmit(values: z.infer<typeof userRegistrationSchema>) {
+  function onSubmit({
+    isEdit,
+    ...values
+  }: z.infer<typeof consignorRegisterSchema>) {
     console.log(values);
     mutate(values);
   }
