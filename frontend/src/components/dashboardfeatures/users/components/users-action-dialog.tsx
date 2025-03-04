@@ -28,72 +28,12 @@ import { SelectDropdown } from '@/components/select-dropdown';
 import { userTypes } from '../data/data';
 import { User } from '../data/schema';
 import { IUserRes } from '@/utils/queries';
-import { userRegistrationSchema } from '@/utils/validationSchemas';
+import { editUserSchema } from '@/utils/validationSchemas';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createNewUser, updateUser } from '@/utils/mutations/adminMutations';
 import { ApiResponse } from '@/utils/apiCall';
 import { useEffect } from 'react';
 import ProfileImage from '@/components/profile-image';
-import { FileEdit } from 'lucide-react';
-
-const formSchema = z.object({
-  firstName: z.string().min(1, { message: 'First Name is required.' }),
-  lastName: z.string().min(1, { message: 'Last Name is required.' }),
-  username: z.string().min(1, { message: 'Username is required.' }),
-  phoneNumber: z.string().min(1, { message: 'Phone number is required.' }),
-  email: z
-    .string()
-    .min(1, { message: 'Email is required.' })
-    .email({ message: 'Email is invalid.' }),
-  password: z.string().transform((pwd) => pwd.trim()),
-  role: z.string().min(1, { message: 'Role is required.' }),
-  confirmPassword: z.string().transform((pwd) => pwd.trim()),
-  isEdit: z.boolean(),
-});
-// .superRefine(({ isEdit, password, confirmPassword }, ctx) => {
-//   if (!isEdit || (isEdit && password !== '')) {
-//     if (password === '') {
-//       ctx.addIssue({
-//         code: z.ZodIssueCode.custom,
-//         message: 'Password is required.',
-//         path: ['password'],
-//       });
-//     }
-
-//     if (password.length < 8) {
-//       ctx.addIssue({
-//         code: z.ZodIssueCode.custom,
-//         message: 'Password must be at least 8 characters long.',
-//         path: ['password'],
-//       });
-//     }
-
-//     if (!password.match(/[a-z]/)) {
-//       ctx.addIssue({
-//         code: z.ZodIssueCode.custom,
-//         message: 'Password must contain at least one lowercase letter.',
-//         path: ['password'],
-//       });
-//     }
-
-//     if (!password.match(/\d/)) {
-//       ctx.addIssue({
-//         code: z.ZodIssueCode.custom,
-//         message: 'Password must contain at least one number.',
-//         path: ['password'],
-//       });
-//     }
-
-//     if (password !== confirmPassword) {
-//       ctx.addIssue({
-//         code: z.ZodIssueCode.custom,
-//         message: "Passwords don't match.",
-//         path: ['confirmPassword'],
-//       });
-//     }
-//   }
-// });
-// type UserForm = z.infer<typeof formSchema>;
 
 interface Props {
   currentRow?: IUserRes['data'][number];
@@ -128,8 +68,8 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
   });
 
   // console.log(currentRow);
-  const form = useForm<z.infer<typeof userRegistrationSchema>>({
-    resolver: zodResolver(userRegistrationSchema),
+  const form = useForm<z.infer<typeof editUserSchema>>({
+    resolver: zodResolver(editUserSchema),
     defaultValues: isEdit
       ? {
           full_name: currentRow?.full_name || '',
@@ -152,7 +92,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
         },
   });
 
-  const onSubmit = (values: z.infer<typeof userRegistrationSchema>) => {
+  const onSubmit = (values: z.infer<typeof editUserSchema>) => {
     console.log(values);
     mutate({
       _id: currentRow?._id,
@@ -175,7 +115,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
         currentRow?.driver ? currentRow.driver.licence_no : ''
       ); // Set the default value to empty if role is 'driver'
     }
-  }, [form.watch('role')]); // Dependency on role
+  }, [form.watch('role')]);
 
   return (
     <Dialog

@@ -15,7 +15,7 @@ const commonFields = {
   role: z.string().min(1, { message: 'Role is required.' }),
 };
 
-const FieldsSuperRefinement = (
+const passwordSuperRefinement = (
   {
     isEdit,
     password,
@@ -25,7 +25,7 @@ const FieldsSuperRefinement = (
     password: string;
     confirm_password: string;
   },
-  ctx: any
+  ctx: z.RefinementCtx
 ) => {
   if (!isEdit || (isEdit && password !== '')) {
     if (password === '') {
@@ -54,16 +54,41 @@ const FieldsSuperRefinement = (
   }
 };
 
+const licenceNumberSuperRefile = (
+  licence_no: string,
+  role: string,
+  ctx: z.RefinementCtx
+) => {
+  if (role === 'driver') {
+    if (licence_no === '') {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Licence Number is required.',
+        path: ['licence_no'],
+      });
+    }
+  }
+};
 const driverRegisterSchema = z
   .object({
     ...commonFields,
     licence_no: z.string().min(1, { message: 'Licence Number is required.' }),
   })
-  .superRefine(FieldsSuperRefinement);
+  .superRefine(passwordSuperRefinement);
 
 const consignorRegisterSchema = z
   .object(commonFields)
-  .superRefine(FieldsSuperRefinement);
+  .superRefine(passwordSuperRefinement);
+
+const editUserSchema = z
+  .object({
+    ...commonFields,
+    licence_no: z.string().optional(),
+  })
+  .superRefine(({ isEdit, role, password, confirm_password }, ctx) => {
+    passwordSuperRefinement({ isEdit, password, confirm_password }, ctx);
+    licenceNumberSuperRefile(password, role, ctx);
+  });
 
 const createOrderSchema = z.object({
   weight: z.string().regex(/^\d+$/, 'Must be a number greater than 0'),
@@ -76,4 +101,5 @@ export {
   consignorRegisterSchema,
   driverRegisterSchema,
   createOrderSchema,
+  editUserSchema,
 };
