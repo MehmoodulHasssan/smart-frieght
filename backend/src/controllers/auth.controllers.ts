@@ -75,28 +75,14 @@ const userRegisterController = async (
       role,
     }: IUserReq = req.body;
     // console.log(req.body);
-    const isUser = await User.findOne({ email });
-    if (isUser) {
+    const isUserWithSameEmail = await User.findOne({ email });
+    if (isUserWithSameEmail) {
       return next(ApiError.badRequest('This email is already registerd'));
     }
+    const isUserWithSamePhone = await User.findOne({ phone_number });
 
-    //handle creation of driver
-    let newDriver;
-
-    if (licence_no) {
-      const isDriver = await Driver.findOne({ licence_no });
-      if (isDriver) {
-        return next(ApiError.badRequest('This driver is already registerd'));
-      }
-      newDriver = await Driver.create({
-        licence_no,
-        status: DriverStatus.UNAVAILABLE,
-      });
-      if (!newDriver) {
-        return next(
-          ApiError.internal('Failed to create driver.Please try again')
-        );
-      }
+    if (isUserWithSamePhone) {
+      return next(ApiError.badRequest('This phone number is already taken'));
     }
     const newUser = await User.create({
       full_name,
@@ -116,6 +102,28 @@ const userRegisterController = async (
       );
     }
 
+    //handle creation of driver
+    const isDriver = await Driver.findOne({ licence_no });
+    if (isDriver) {
+      await User.findByIdAndDelete(newUser._id);
+      return next(
+        ApiError.badRequest(
+          'The driver with the same licence no already exists'
+        )
+      );
+    }
+
+    const newDriver = await Driver.create({
+      licence_no,
+      status: DriverStatus.UNAVAILABLE,
+      user: newUser._id,
+    });
+
+    if (!newDriver) {
+      return next(
+        ApiError.internal('Failed to create driver.Please try again')
+      );
+    }
     if (!newDriver) {
       await User.findByIdAndDelete(newUser._id);
       return next(
