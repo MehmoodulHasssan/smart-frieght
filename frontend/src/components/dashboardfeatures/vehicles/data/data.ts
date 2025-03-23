@@ -35,3 +35,5 @@ export const vehicleStatusTypes = [
     icon: IconUsersGroup,
   },
 ];
+
+

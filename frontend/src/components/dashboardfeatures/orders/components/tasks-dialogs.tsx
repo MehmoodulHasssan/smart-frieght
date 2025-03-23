@@ -5,6 +5,8 @@ import { useOrders } from '../context/orders-context';
 import { OrdersMutateDrawer } from './orders-mutate-drawer';
 import MapRouteModal from '@/components/map-subcomponents/MapRouteModal';
 import { LatLng } from 'leaflet';
+import { OrderStatus } from '@/utils/queries';
+import OrdersTrack from './orders-track';
 // import { TasksMutateDrawer } from './orders-mutate-drawer';
 
 export function TasksDialogs() {
@@ -25,6 +27,29 @@ export function TasksDialogs() {
 
       {currentRow && (
         <>
+          {open === 'track' &&
+            currentRow.status === OrderStatus.IN_PROGRESS &&
+            currentRow?.route && (
+              <OrdersTrack
+                driver={currentRow.driver}
+                onOpenChange={() => setOpen(null)}
+                geometry={currentRow.route.geometry}
+                from={{
+                  position: new LatLng(
+                    currentRow.pickup_location.latitude,
+                    currentRow.pickup_location.longitude
+                  ),
+                  address: currentRow.pickup_location.address,
+                }}
+                to={{
+                  position: new LatLng(
+                    currentRow.dropoff_location.latitude,
+                    currentRow.dropoff_location.longitude
+                  ),
+                  address: currentRow.dropoff_location.address,
+                }}
+              />
+            )}
           {open === 'route' && currentRow?.route && (
             <MapRouteModal
               key={`order-map-${currentRow._id}`}

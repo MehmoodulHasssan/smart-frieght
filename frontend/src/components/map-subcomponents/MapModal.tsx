@@ -43,10 +43,18 @@ const center = [30.3753, 69.3451]; // Approximate center of Pakistan
 export const customLocationIcon = new Icon({
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   iconUrl: 'https://cdn-icons-png.flaticon.com/512/2991/2991231.png', // Default marker icon URL
-
   iconSize: [32, 32], // Resize the default icon
   iconAnchor: [16, 32], // Anchor the icon at the bottom
   popupAnchor: [0, -32], // Adjust the popup position
+  // className: 'bouncing-icon icon-size',
+});
+
+export const driverLocationIcon = new Icon({
+  iconUrl: 'https://cdn-icons-png.flaticon.com/512/2991/2991231.png', // Default marker icon URL
+  iconSize: [32, 32], // Resize the default icon
+  iconAnchor: [16, 32], // Anchor the icon at the bottom
+  popupAnchor: [0, -32], // Adjust the popup position
+  // className: 'bouncing-icon icon-size',
 });
 
 function LocationMarker({ location }: { location: Location | null }) {

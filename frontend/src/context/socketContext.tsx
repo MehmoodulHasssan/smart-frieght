@@ -8,7 +8,6 @@ import React, {
 } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useAuthContext } from './authContext';
-import { set } from 'zod';
 import { toast } from '@/hooks/use-toast';
 
 // Define the context type for Socket.IO
@@ -54,15 +53,17 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
       },
       //if permission denied
       (error) => {
-        console.error(error);
+        console.log(error);
         watchIdRef.current = null;
-        toast({
-          title: 'Error',
-          description: 'Location permission denied',
-          variant: 'destructive',
-        });
+        if (error.code === 1) {
+          toast({
+            title: 'Error',
+            description: 'Location permission denied',
+            variant: 'destructive',
+          });
+        }
       },
-      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   };
 

@@ -11,7 +11,7 @@ import consignorRouter from './routes/consignor.router';
 import adminRouter from './routes/admin.router';
 import driverRouter from './routes/driver.router';
 
-const port: number = process.env.PORT as unknown as number;
+const port = process.env.PORT;
 
 //connect to db
 connectDb();
@@ -21,7 +21,11 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(
   cors({
-    origin: ['http://localhost:3000', 'http://192.168.1.**:3000'],
+    origin: [
+      'http://localhost:3000',
+      'http://192.168.1.**:3000',
+      'https://matrix-beginner-massive-removing.trycloudflare.com',
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
   })

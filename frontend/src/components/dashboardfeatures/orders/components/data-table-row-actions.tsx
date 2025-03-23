@@ -16,28 +16,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useOrders } from '../context/orders-context';
-import { labels } from '../data/data';
-import { taskSchema } from '../data/schema';
-import { IOrderRes, OrderStatus } from '@/utils/queries';
-
-const statusOptions = [
-  {
-    label: 'Pending',
-    value: OrderStatus.PENDING,
-  },
-  {
-    label: 'In Progress',
-    value: OrderStatus.IN_PROGRESS,
-  },
-  {
-    label: 'Completed',
-    value: OrderStatus.COMPLETED,
-  },
-  {
-    label: 'Canceled',
-    value: OrderStatus.CANCELED,
-  },
-];
+import { IOrderRes } from '@/utils/queries';
+import { statusOptions } from '../data/data-sets';
 
 interface DataTableRowActionsProps {
   row: Row<IOrderRes['data'][number]>;
@@ -75,6 +55,14 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
           }}
         >
           Show Route
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            setCurrentRow(row.original);
+            setOpen('track');
+          }}
+        >
+          Track Driver
         </DropdownMenuItem>
         {/* <DropdownMenuItem disabled>Make a copy</DropdownMenuItem>
         <DropdownMenuItem disabled>Favorite</DropdownMenuItem> */}

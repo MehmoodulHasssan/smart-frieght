@@ -24,7 +24,7 @@ const loginController = async (
       { email },
       '-createdAt -updatedAt -driver -__v'
     ).lean();
-    console.log('User: ', user);
+
     if (!user) {
       return next(ApiError.badRequest('This email is not registerd'));
     }

@@ -4,6 +4,7 @@ import MapModalWrapper from './MapModalWrapper';
 import CloseButton from '../CloseButton';
 import { LatLng, LatLngExpression } from 'leaflet';
 import {
+  Circle,
   MapContainer,
   Marker,
   Polyline,
@@ -13,7 +14,7 @@ import {
 } from 'react-leaflet';
 import { safeDecode } from '@/utils/helpers';
 import { Location } from '@/app/orders/new/CreateOrder';
-import { customLocationIcon } from './MapModal';
+import { customLocationIcon, driverLocationIcon } from './MapModal';
 
 const center = [30.3753, 69.3451]; // Approximate center of Pakistan
 
@@ -31,24 +32,39 @@ const FitToPolyLine: React.FC<{ positions: any }> = ({ positions }) => {
   return null;
 };
 
-function LocationMarker({ location }: { location: Location }) {
-  console.log(location);
-  //   const map = useMap();
+const FitToMarker: React.FC<{ position: any }> = ({ position }) => {
+  const map = useMap(); // Get the map instance
 
-  // //   useEffect(() => {
-  // //     if (location) {
-  // //       console.log(location);
-  // //       map.flyTo(location?.position, 16);
-  // //     }
-  // //   }, [location, map]);
+  useEffect(() => {
+    if (position) {
+      map.setView(position, 16);
+    }
+  }, [map, position]);
 
+  return null;
+};
+
+function LocationMarker({
+  location,
+  isDriver,
+}: {
+  location: Location;
+  isDriver?: boolean;
+}) {
   return location ? (
-    <Marker
-      position={[location?.position.lat, location?.position.lng]}
-      icon={customLocationIcon}
-    >
-      <Popup>{location?.address}</Popup>
-    </Marker>
+    <>
+      <Marker
+        position={[location?.position.lat, location?.position.lng]}
+        icon={isDriver ? driverLocationIcon : customLocationIcon}
+      >
+        <Popup>{location?.address}</Popup>
+      </Marker>
+      <Circle
+        radius={40}
+        center={[location?.position.lat, location?.position.lng]}
+        color="red"
+      />
+    </>
   ) : null;
 }
 
@@ -57,9 +73,16 @@ interface PropTypes {
   geometry: string;
   from: Location;
   to: Location;
+  tracker?: Location;
 }
 
-const MapRouteModal = ({ onOpenChange, from, geometry, to }: PropTypes) => {
+const MapRouteModal = ({
+  onOpenChange,
+  from,
+  geometry,
+  to,
+  tracker,
+}: PropTypes) => {
   const bounds = safeDecode(geometry);
   console.log('Geometry Bounds: ', bounds);
 
@@ -85,9 +108,11 @@ const MapRouteModal = ({ onOpenChange, from, geometry, to }: PropTypes) => {
             // color: 'blue',
           }}
         />
-        <FitToPolyLine positions={bounds} />
-        {from && <LocationMarker location={from} />}
-        {to && <LocationMarker location={to} />}
+        {tracker && <FitToMarker position={tracker?.position} />}
+        {!tracker && bounds && <FitToPolyLine positions={bounds} />}
+        {!tracker && from && <LocationMarker location={from} />}
+        {!tracker && to && <LocationMarker location={to} />}
+        {tracker && <LocationMarker location={tracker} isDriver={true} />}
         {/* <LocationMarker location={location ? location : null} /> */}
       </MapContainer>
     </MapModalWrapper>

@@ -3,7 +3,13 @@ import useDialogState from '@/hooks/use-dialog-state';
 import { IOrderRes } from '@/utils/queries';
 // import { Order } from '../data/schema';
 
-type OrdersDialogType = 'create' | 'update' | 'delete' | 'details' | 'route';
+type OrdersDialogType =
+  | 'create'
+  | 'update'
+  | 'delete'
+  | 'details'
+  | 'route'
+  | 'track';
 
 interface OrdersContextType {
   open: OrdersDialogType | null;

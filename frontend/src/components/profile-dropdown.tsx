@@ -24,9 +24,11 @@ import {
   unregisteredNavData,
 } from '@/utils/data';
 import { getAvatarFallBack } from '@/utils/helpers';
+import { useSocket } from '@/context/socketContext';
 
 export function ProfileDropdown() {
   const { currentUser, setCurrentUser } = useAuthContext();
+  const { disconnectFromSocket } = useSocket();
   const isMobile = useIsMobile();
   const router = useRouter();
   const { toast } = useToast();
@@ -35,6 +37,7 @@ export function ProfileDropdown() {
     mutationFn: logoutUser,
     onSuccess: () => {
       setCurrentUser(null);
+      disconnectFromSocket();
       toast({
         title: 'Success',
         description: 'Logged out successfully',

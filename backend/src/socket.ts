@@ -8,7 +8,11 @@ const app: Application = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: ['http://localhost:3000'],
+    origin: [
+      'http://localhost:3000',
+      'https://think-short-vs-occasion.trycloudflare.com',
+      'https://matrix-beginner-massive-removing.trycloudflare.com',
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
   },
@@ -20,7 +24,7 @@ let adminSocketId = '';
 
 io.on('connection', async (socket) => {
   const cookie = socket.handshake.headers.cookie as string;
-  const token = cookie.split('=')[1];
+  const token = cookie?.split('=')?.[1];
   if (!token) {
     console.log('no token found');
     socket.disconnect();
